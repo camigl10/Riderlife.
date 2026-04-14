@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RiderLife</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
+.lucide { display:inline-block; vertical-align:middle; }
+[data-lucide] { display:inline-block; vertical-align:middle; }
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
   --bg:#F9F6F1;--surface:#fff;--surface2:#F2EDE5;--border:#E8DFD2;
@@ -213,13 +216,21 @@ textarea.inp{resize:vertical;min-height:70px}
 .cal-event-soon{font-size:11px;font-weight:600;padding:2px 7px;border-radius:10px;background:#FDF3D0;color:#9a6d00}
 
 /* PREMIUM */
-.premium-lock{text-align:center;padding:40px 20px}
-.premium-icon{font-size:48px;margin-bottom:12px}
-.premium-title{font-size:20px;font-weight:700;margin-bottom:8px}
-.premium-desc{font-size:14px;color:var(--text3);margin-bottom:24px;line-height:1.6}
-.premium-price{font-size:28px;font-weight:800;color:var(--primary);margin-bottom:4px}
-.premium-period{font-size:13px;color:var(--text3);margin-bottom:24px}
+.premium-lock{padding:8px 0}
+.premium-icon{font-size:44px;margin-bottom:10px;text-align:center}
+.premium-title{font-size:20px;font-weight:700;margin-bottom:8px;text-align:center}
+.premium-desc{font-size:13.5px;color:var(--text3);margin-bottom:20px;line-height:1.6;text-align:center}
+.premium-price{font-size:32px;font-weight:800;color:var(--primary);text-align:center;margin-bottom:2px}
+.premium-period{font-size:12px;color:var(--text3);margin-bottom:20px;text-align:center}
 .premium-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#DAA520,#f0c040);color:#fff;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:700}
+.premium-features{background:var(--surface2);border-radius:var(--rs);padding:14px;margin-bottom:20px}
+.premium-feature{display:flex;align-items:center;gap:8px;font-size:13.5px;padding:5px 0}
+.mp-btn{width:100%;padding:14px;background:#009EE3;color:#fff;border:none;border-radius:var(--rs);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;font-family:inherit;transition:.2s}
+.mp-btn:hover{background:#0086c3}
+.coupon-toggle{text-align:center;font-size:13px;color:var(--text3);cursor:pointer;margin-bottom:8px}
+.coupon-toggle span{color:var(--primary);text-decoration:underline}
+.coupon-area{display:none;margin-bottom:8px}
+.coupon-area.open{display:flex;gap:8px}
 
 /* QUESTIONNAIRE */
 .q-step{display:none}.q-step.active{display:block}
@@ -233,6 +244,12 @@ textarea.inp{resize:vertical;min-height:70px}
 .q-option:hover{border-color:var(--primary);background:#FFF5EE}
 .q-option.selected{border-color:var(--primary);background:#FFF5EE;color:var(--primary)}
 .q-option-icon{font-size:22px;margin-bottom:4px}
+
+/* ARENA LAYOUT */
+.arena-wrap{background:#f5f0e8;border-radius:var(--r);padding:16px;margin:14px 0;border:1px solid var(--border)}
+.arena-title{font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;text-align:center}
+.arena-svg{width:100%;max-width:420px;display:block;margin:0 auto}
+.arena-note{font-size:12px;color:var(--text2);margin-top:10px;line-height:1.6;padding:8px;background:#fff;border-radius:6px}
 
 /* PLAN DISPLAY */
 .plan-day{border-radius:var(--rs);border:1px solid var(--border);margin-bottom:10px;overflow:hidden}
@@ -292,6 +309,10 @@ textarea.inp{resize:vertical;min-height:70px}
       <label class="ilbl">Confirmar contraseña</label>
       <input class="inp" id="auth-pass2" type="password" placeholder="Repetí la contraseña">
     </div>
+    <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);margin-bottom:12px;cursor:pointer">
+      <input type="checkbox" id="auth-remember" checked style="accent-color:var(--primary);width:15px;height:15px">
+      Recordar mi sesión
+    </label>
     <button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-top:4px" id="auth-submit-btn" onclick="submitAuth()">Entrar</button>
     <div style="text-align:center;margin-top:16px;font-size:12px;color:var(--text3)">Tus datos se guardan solo en este dispositivo</div>
   </div>
@@ -308,7 +329,7 @@ textarea.inp{resize:vertical;min-height:70px}
       <button class="tab-btn" data-tab="motivacion">Motivación</button>
     </div>
     <div class="user-badge">
-      <span>👤</span>
+      <i data-lucide="user" style="width:16px;height:16px"></i>
       <span class="user-badge-name" id="nav-username"></span>
       <button class="btn-logout" onclick="logout()" title="Cerrar sesión">Salir</button>
     </div>
@@ -332,10 +353,10 @@ textarea.inp{resize:vertical;min-height:70px}
       <div id="inicio-horse-tasks"></div>
     </div>
     <div class="card">
-      <div class="card-title">💧 Agua hoy</div>
+      <div class="card-title"><i data-lucide="droplets" style="width:16px;height:16px"></i> Agua hoy</div>
       <div id="inicio-water"></div>
       <div class="hr"></div>
-      <div class="card-title" style="margin-top:4px">🏋️ Gimnasio hoy</div>
+      <div class="card-title" style="margin-top:4px"><i data-lucide="dumbbell" style="width:16px;height:16px"></i> Gimnasio hoy</div>
       <div id="inicio-gym"></div>
     </div>
   </div>
@@ -348,7 +369,7 @@ textarea.inp{resize:vertical;min-height:70px}
       <div class="sh-title">🐴 Mi Caballo</div>
       <div class="sh-sub" id="horse-subtitle">Cuidado y entrenamiento</div>
     </div>
-    <button class="btn btn-secondary btn-sm" onclick="openModal('modal-horse-profile')">✏️ Perfil</button>
+    <button class="btn btn-secondary btn-sm" onclick="openModal('modal-horse-profile')"><i data-lucide="pencil" style="width:14px;height:14px"></i> Perfil</button>
   </div>
 
   <div id="horse-profile-display"></div>
@@ -357,8 +378,8 @@ textarea.inp{resize:vertical;min-height:70px}
     <button class="stab active" data-stab="cuidado" data-group="caballo">Cuidado diario</button>
     <button class="stab" data-stab="entrenamiento" data-group="caballo">Entrenamiento</button>
     <button class="stab" data-stab="salud" data-group="caballo">Salud</button>
-    <button class="stab" data-stab="calendario" data-group="caballo">📅 Calendario</button>
-    <button class="stab" data-stab="plan-ecuestre" data-group="caballo">⭐ Plan</button>
+    <button class="stab" data-stab="calendario" data-group="caballo"><i data-lucide="calendar" style="width:13px;height:13px"></i> Calendario</button>
+    <button class="stab" data-stab="plan-ecuestre" data-group="caballo"><i data-lucide="sparkles" style="width:13px;height:13px"></i> Plan</button>
   </div>
 
   <div id="stab-cuidado" class="subcontent active">
@@ -390,9 +411,9 @@ textarea.inp{resize:vertical;min-height:70px}
   <div id="stab-calendario" class="subcontent">
     <div class="card">
       <div class="cal-nav">
-        <button class="btn-icon" onclick="calNav(-1)">◀</button>
+        <button class="btn-icon" onclick="calNav(-1)"><i data-lucide="chevron-left" style="width:16px;height:16px"></i></button>
         <div class="cal-month" id="cal-month-label"></div>
-        <button class="btn-icon" onclick="calNav(1)">▶</button>
+        <button class="btn-icon" onclick="calNav(1)"><i data-lucide="chevron-right" style="width:16px;height:16px"></i></button>
       </div>
       <div class="cal-grid" id="cal-grid"></div>
       <div class="cal-upcoming">
@@ -411,14 +432,14 @@ textarea.inp{resize:vertical;min-height:70px}
 <!-- ===== GIMNASIO ===== -->
 <section id="tab-gimnasio" class="section">
   <div class="sh">
-    <div><div class="sh-title">🏋️ Gimnasio</div><div class="sh-sub">Entrena fuerte, monta mejor</div></div>
+    <div><div class="sh-title"><i data-lucide="dumbbell" style="width:20px;height:20px"></i> Gimnasio</div><div class="sh-sub">Entrena fuerte, monta mejor</div></div>
     <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-workout')">+ Sesión</button>
   </div>
 
   <div class="stabs">
     <button class="stab active" data-stab="gym-hoy" data-group="gym">Hoy</button>
     <button class="stab" data-stab="gym-rutinas" data-group="gym">Rutinas</button>
-    <button class="stab" data-stab="gym-personal" data-group="gym">💎 Personal</button>
+    <button class="stab" data-stab="gym-personal" data-group="gym"><i data-lucide="gem" style="width:13px;height:13px"></i> Personal</button>
     <button class="stab" data-stab="gym-historial" data-group="gym">Historial</button>
   </div>
 
@@ -442,7 +463,7 @@ textarea.inp{resize:vertical;min-height:70px}
 <!-- ===== DIETA ===== -->
 <section id="tab-dieta" class="section">
   <div class="sh">
-    <div><div class="sh-title">🥗 Dieta</div><div class="sh-sub">Combustible para rendir</div></div>
+    <div><div class="sh-title"><i data-lucide="salad" style="width:20px;height:20px"></i> Dieta</div><div class="sh-sub">Combustible para rendir</div></div>
   </div>
 
   <div class="stabs">
@@ -462,7 +483,7 @@ textarea.inp{resize:vertical;min-height:70px}
 <!-- ===== MOTIVACION ===== -->
 <section id="tab-motivacion" class="section">
   <div class="sh">
-    <div><div class="sh-title">🌟 Motivación</div><div class="sh-sub">Tus metas, tus logros</div></div>
+    <div><div class="sh-title"><i data-lucide="sparkles" style="width:20px;height:20px"></i> Motivación</div><div class="sh-sub">Tus metas, tus logros</div></div>
   </div>
 
   <div class="stabs">
@@ -495,7 +516,7 @@ textarea.inp{resize:vertical;min-height:70px}
 <!-- Horse Profile -->
 <div class="overlay" id="modal-horse-profile">
   <div class="modal">
-    <div class="mhdr"><div class="mtitle">Perfil del caballo</div><button class="mclose" onclick="closeModal('modal-horse-profile')">✕</button></div>
+    <div class="mhdr"><div class="mtitle">Perfil del caballo</div><button class="mclose" onclick="closeModal('modal-horse-profile')"><i data-lucide="x" style="width:16px;height:16px"></i></button></div>
     <div class="igrp"><label class="ilbl">Nombre</label><input class="inp" id="hp-name" placeholder="Nombre de tu caballo"></div>
     <div class="igrp"><label class="ilbl">Raza</label><input class="inp" id="hp-breed" placeholder="Ej: Warmblood, PRE, KWPN..."></div>
     <div class="grid2">
@@ -510,17 +531,17 @@ textarea.inp{resize:vertical;min-height:70px}
 <!-- Add Task -->
 <div class="overlay" id="modal-add-task">
   <div class="modal">
-    <div class="mhdr"><div class="mtitle">Nueva tarea</div><button class="mclose" onclick="closeModal('modal-add-task')">✕</button></div>
+    <div class="mhdr"><div class="mtitle">Nueva tarea</div><button class="mclose" onclick="closeModal('modal-add-task')"><i data-lucide="x" style="width:16px;height:16px"></i></button></div>
     <div class="igrp"><label class="ilbl">Descripción</label><input class="inp" id="task-text" placeholder="Ej: Alimentar, Limpiar el box..."></div>
     <div class="grid2">
       <div class="igrp"><label class="ilbl">Hora</label><input class="inp" id="task-time" type="time"></div>
       <div class="igrp"><label class="ilbl">Categoría</label>
         <select class="inp" id="task-cat">
-          <option value="alimentacion">🌾 Alimentación</option>
-          <option value="limpieza">🧹 Limpieza</option>
-          <option value="ejercicio">🏇 Ejercicio</option>
-          <option value="salud">💊 Salud</option>
-          <option value="otro">📌 Otro</option>
+          <option value="alimentacion">Alimentación</option>
+          <option value="limpieza">Limpieza</option>
+          <option value="ejercicio">Ejercicio</option>
+          <option value="salud">Salud</option>
+          <option value="otro">Otro</option>
         </select>
       </div>
     </div>
@@ -531,7 +552,7 @@ textarea.inp{resize:vertical;min-height:70px}
 <!-- Add Training -->
 <div class="overlay" id="modal-add-training">
   <div class="modal">
-    <div class="mhdr"><div class="mtitle">Sesión de entrenamiento</div><button class="mclose" onclick="closeModal('modal-add-training')">✕</button></div>
+    <div class="mhdr"><div class="mtitle">Sesión de entrenamiento</div><button class="mclose" onclick="closeModal('modal-add-training')"><i data-lucide="x" style="width:16px;height:16px"></i></button></div>
     <div class="igrp"><label class="ilbl">Fecha</label><input class="inp" id="tr-date" type="date"></div>
     <div class="grid2">
       <div class="igrp"><label class="ilbl">Tipo</label>
@@ -551,11 +572,11 @@ textarea.inp{resize:vertical;min-height:70px}
     </div>
     <div class="igrp"><label class="ilbl">Valoración</label>
       <select class="inp" id="tr-rating">
-        <option value="5">⭐⭐⭐⭐⭐ Excelente</option>
-        <option value="4">⭐⭐⭐⭐ Muy buena</option>
-        <option value="3" selected>⭐⭐⭐ Buena</option>
-        <option value="2">⭐⭐ Regular</option>
-        <option value="1">⭐ Difícil</option>
+        <option value="5">5 Estrellas - Excelente</option>
+        <option value="4">4 Estrellas - Muy buena</option>
+        <option value="3" selected>3 Estrellas - Buena</option>
+        <option value="2">2 Estrellas - Regular</option>
+        <option value="1">1 Estrella - Difícil</option>
       </select>
     </div>
     <div class="igrp"><label class="ilbl">Notas</label><textarea class="inp" id="tr-notes" placeholder="¿Cómo fue la sesión?"></textarea></div>
@@ -566,17 +587,17 @@ textarea.inp{resize:vertical;min-height:70px}
 <!-- Add Health -->
 <div class="overlay" id="modal-add-health">
   <div class="modal">
-    <div class="mhdr"><div class="mtitle">Registro de salud</div><button class="mclose" onclick="closeModal('modal-add-health')">✕</button></div>
+    <div class="mhdr"><div class="mtitle">Registro de salud</div><button class="mclose" onclick="closeModal('modal-add-health')"><i data-lucide="x" style="width:16px;height:16px"></i></button></div>
     <div class="igrp"><label class="ilbl">Fecha</label><input class="inp" id="hl-date" type="date"></div>
     <div class="igrp"><label class="ilbl">Tipo</label>
       <select class="inp" id="hl-type">
-        <option value="Veterinario">🩺 Visita veterinaria</option>
-        <option value="Herrador">🔨 Herrador</option>
-        <option value="Vacuna">💉 Vacuna</option>
-        <option value="Desparasitacion">🧪 Desparasitación</option>
-        <option value="Lesion">🩹 Lesión / Tratamiento</option>
-        <option value="Dentista">🦷 Dentista equino</option>
-        <option value="Otro">📋 Otro</option>
+        <option value="Veterinario">Visita veterinaria</option>
+        <option value="Herrador">Herrador</option>
+        <option value="Vacuna">Vacuna</option>
+        <option value="Desparasitacion">Desparasitación</option>
+        <option value="Lesion">Lesión / Tratamiento</option>
+        <option value="Dentista">Dentista equino</option>
+        <option value="Otro">Otro</option>
       </select>
     </div>
     <div class="igrp"><label class="ilbl">Notas</label><textarea class="inp" id="hl-notes" placeholder="Detalles..."></textarea></div>
@@ -587,18 +608,18 @@ textarea.inp{resize:vertical;min-height:70px}
 <!-- Add Workout -->
 <div class="overlay" id="modal-add-workout">
   <div class="modal">
-    <div class="mhdr"><div class="mtitle">Registrar entrenamiento</div><button class="mclose" onclick="closeModal('modal-add-workout')">✕</button></div>
+    <div class="mhdr"><div class="mtitle">Registrar entrenamiento</div><button class="mclose" onclick="closeModal('modal-add-workout')"><i data-lucide="x" style="width:16px;height:16px"></i></button></div>
     <div class="igrp"><label class="ilbl">Fecha</label><input class="inp" id="wo-date" type="date"></div>
     <div class="grid2">
       <div class="igrp"><label class="ilbl">Tipo</label>
         <select class="inp" id="wo-type">
-          <option value="Fuerza">💪 Fuerza</option>
-          <option value="Cardio">🏃 Cardio</option>
-          <option value="Movilidad">🧘 Movilidad / Flexibilidad</option>
-          <option value="HIIT">⚡ HIIT</option>
-          <option value="Core">🎯 Core</option>
-          <option value="Ecuestre-específico">🐴 Específico ecuestre</option>
-          <option value="Otro">🏋️ Otro</option>
+          <option value="Fuerza">Fuerza</option>
+          <option value="Cardio">Cardio</option>
+          <option value="Movilidad">Movilidad / Flexibilidad</option>
+          <option value="HIIT">HIIT</option>
+          <option value="Core">Core</option>
+          <option value="Ecuestre-específico">Específico ecuestre</option>
+          <option value="Otro">Otro</option>
         </select>
       </div>
       <div class="igrp"><label class="ilbl">Duración (min)</label><input class="inp" id="wo-duration" type="number" placeholder="45"></div>
@@ -612,13 +633,13 @@ textarea.inp{resize:vertical;min-height:70px}
 <!-- Add Meal Item -->
 <div class="overlay" id="modal-add-meal">
   <div class="modal">
-    <div class="mhdr"><div class="mtitle">Agregar alimento</div><button class="mclose" onclick="closeModal('modal-add-meal')">✕</button></div>
+    <div class="mhdr"><div class="mtitle">Agregar alimento</div><button class="mclose" onclick="closeModal('modal-add-meal')"><i data-lucide="x" style="width:16px;height:16px"></i></button></div>
     <div class="igrp"><label class="ilbl">Comida</label>
       <select class="inp" id="meal-slot-select">
-        <option value="Desayuno">🌅 Desayuno</option>
-        <option value="Almuerzo">☀️ Almuerzo</option>
-        <option value="Merienda">🍎 Merienda</option>
-        <option value="Cena">🌙 Cena</option>
+        <option value="Desayuno">Desayuno</option>
+        <option value="Almuerzo">Almuerzo</option>
+        <option value="Merienda">Merienda</option>
+        <option value="Cena">Cena</option>
       </select>
     </div>
     <div class="igrp"><label class="ilbl">Alimento</label><input class="inp" id="meal-food" placeholder="Ej: Avena con frutas, Pollo con arroz..."></div>
@@ -630,16 +651,16 @@ textarea.inp{resize:vertical;min-height:70px}
 <!-- Add Goal -->
 <div class="overlay" id="modal-add-goal">
   <div class="modal">
-    <div class="mhdr"><div class="mtitle">Nuevo objetivo</div><button class="mclose" onclick="closeModal('modal-add-goal')">✕</button></div>
+    <div class="mhdr"><div class="mtitle">Nuevo objetivo</div><button class="mclose" onclick="closeModal('modal-add-goal')"><i data-lucide="x" style="width:16px;height:16px"></i></button></div>
     <div class="igrp"><label class="ilbl">Objetivo</label><input class="inp" id="goal-title" placeholder="¿Qué quieres lograr?"></div>
     <div class="grid2">
       <div class="igrp"><label class="ilbl">Categoría</label>
         <select class="inp" id="goal-cat">
-          <option value="equitacion">🐴 Equitación</option>
-          <option value="gym">🏋️ Gimnasio</option>
-          <option value="dieta">🥗 Dieta</option>
-          <option value="personal">🌟 Personal</option>
-          <option value="competencia">🏆 Competencia</option>
+          <option value="equitacion">Equitación</option>
+          <option value="gym">Gimnasio</option>
+          <option value="dieta">Dieta</option>
+          <option value="personal">Personal</option>
+          <option value="competencia">Competencia</option>
         </select>
       </div>
       <div class="igrp"><label class="ilbl">Fecha límite</label><input class="inp" id="goal-deadline" type="date"></div>
@@ -652,16 +673,16 @@ textarea.inp{resize:vertical;min-height:70px}
 <!-- Calendar Event Modal -->
 <div class="overlay" id="modal-cal-event">
   <div class="modal">
-    <div class="mhdr"><div class="mtitle">Nuevo evento</div><button class="mclose" onclick="closeModal('modal-cal-event')">✕</button></div>
+    <div class="mhdr"><div class="mtitle">Nuevo evento</div><button class="mclose" onclick="closeModal('modal-cal-event')"><i data-lucide="x" style="width:16px;height:16px"></i></button></div>
     <div class="igrp"><label class="ilbl">Tipo</label>
       <select class="inp" id="cal-type">
-        <option value="herrador">🔨 Herrador</option>
-        <option value="vacuna">💉 Vacuna</option>
-        <option value="despar">🧪 Desparasitación</option>
-        <option value="vet">🩺 Veterinario</option>
-        <option value="dent">🦷 Dentista equino</option>
-        <option value="comp">🏆 Competencia</option>
-        <option value="otro">📌 Otro</option>
+        <option value="herrador">Herrador</option>
+        <option value="vacuna">Vacuna</option>
+        <option value="despar">Desparasitación</option>
+        <option value="vet">Veterinario</option>
+        <option value="dent">Dentista equino</option>
+        <option value="comp">Competencia</option>
+        <option value="otro">Otro</option>
       </select>
     </div>
     <div class="igrp"><label class="ilbl">Título / detalle</label><input class="inp" id="cal-title" placeholder="Ej: Herrado + herradura nueva"></div>
@@ -674,22 +695,37 @@ textarea.inp{resize:vertical;min-height:70px}
 <!-- Premium Activation Modal -->
 <div class="overlay" id="modal-premium">
   <div class="modal">
-    <div class="mhdr"><div class="mtitle">💎 Activar Premium</div><button class="mclose" onclick="closeModal('modal-premium')">✕</button></div>
-    <div style="text-align:center;padding:10px 0 20px">
-      <div style="font-size:40px;margin-bottom:8px">💎</div>
-      <div style="font-size:15px;font-weight:600;margin-bottom:6px">Plan Personal Premium</div>
-      <div style="font-size:13px;color:var(--text3);margin-bottom:20px">Ingresá tu código de activación para desbloquear el plan personalizado de gym y entrenamiento ecuestre</div>
+    <div class="mhdr"><div class="mtitle"><i data-lucide="gem" style="width:16px;height:16px"></i> Premium</div><button class="mclose" onclick="closeModal('modal-premium')"><i data-lucide="x" style="width:16px;height:16px"></i></button></div>
+    <div class="premium-lock">
+      <div class="premium-icon"><i data-lucide="gem" style="width:44px;height:44px"></i></div>
+      <div class="premium-title">Plan Personal RiderLife</div>
+      <div class="premium-desc">Desbloqueá tu plan de gym y entrenamiento ecuestre 100% personalizado</div>
+      <div class="premium-features">
+        <div class="premium-feature"><i data-lucide="dumbbell" style="width:16px;height:16px"></i> Plan de gym adaptado a tu cuerpo y objetivos</div>
+        <div class="premium-feature">🐴 Entrenamiento ecuestre para vos y tu caballo</div>
+        <div class="premium-feature"><i data-lucide="sparkles" style="width:16px;height:16px"></i> Ejercicios por nivel y disciplina</div>
+        <div class="premium-feature"><i data-lucide="activity" style="width:16px;height:16px"></i> Suscripción mensual · cancelás cuando quieras</div>
+      </div>
+      <div class="premium-price">$2.500 ARS</div>
+      <div class="premium-period">por mes · cancelás cuando quieras</div>
+      <button class="mp-btn" onclick="payWithMP()">
+        <img src="https://http2.mlstatic.com/frontend-assets/mp-web-navigation/ui-navigation/6.6.66/mercadopago/logo__small@2x.png" style="height:22px;filter:brightness(10)"> Pagar con Mercado Pago
+      </button>
+      <div class="coupon-toggle" onclick="toggleCoupon()">¿Tenés un cupón? <span>Ingresalo acá</span></div>
+      <div class="coupon-area" id="coupon-area">
+        <input class="inp" id="premium-code" placeholder="Código de cupón" style="text-transform:uppercase;flex:1">
+        <button class="btn btn-primary" onclick="activatePremium()">Aplicar</button>
+      </div>
+      <div class="login-error" id="premium-error"></div>
+      <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:10px">Después de suscribirte vas a recibir tu código de activación por WhatsApp</div>
     </div>
-    <div class="igrp"><label class="ilbl">Código de activación</label><input class="inp" id="premium-code" placeholder="Ingresá tu código..." style="text-transform:uppercase"></div>
-    <div class="login-error" id="premium-error"></div>
-    <div class="mfooter"><button class="btn btn-secondary" onclick="closeModal('modal-premium')">Cancelar</button><button class="btn btn-primary" onclick="activatePremium()">Activar</button></div>
   </div>
 </div>
 
 <!-- Gym Questionnaire Modal -->
 <div class="overlay" id="modal-gym-q">
   <div class="modal">
-    <div class="mhdr"><div class="mtitle">Tu perfil de entrenamiento</div><button class="mclose" onclick="closeModal('modal-gym-q')">✕</button></div>
+    <div class="mhdr"><div class="mtitle">Tu perfil de entrenamiento</div><button class="mclose" onclick="closeModal('modal-gym-q')"><i data-lucide="x" style="width:16px;height:16px"></i></button></div>
     <div class="q-progress" id="gym-q-progress"></div>
 
     <div class="q-step active" id="gym-q-1">
@@ -775,7 +811,7 @@ textarea.inp{resize:vertical;min-height:70px}
 <!-- Equestrian Questionnaire Modal -->
 <div class="overlay" id="modal-eq-q">
   <div class="modal">
-    <div class="mhdr"><div class="mtitle">⭐ Plan Ecuestre Personalizado</div><button class="mclose" onclick="closeModal('modal-eq-q')">✕</button></div>
+    <div class="mhdr"><div class="mtitle"><i data-lucide="sparkles" style="width:16px;height:16px"></i> Plan Ecuestre Personalizado</div><button class="mclose" onclick="closeModal('modal-eq-q')"><i data-lucide="x" style="width:16px;height:16px"></i></button></div>
     <div class="q-progress" id="eq-q-progress"></div>
 
     <div class="q-step active" id="eq-q-1">
@@ -792,11 +828,12 @@ textarea.inp{resize:vertical;min-height:70px}
       </div>
       <div class="igrp"><label class="ilbl">Disciplina principal</label>
         <select class="inp" id="eq-discipline">
-          <option value="doma">Doma clásica</option>
           <option value="salto">Salto de obstáculos</option>
-          <option value="completo">Concurso completo</option>
-          <option value="endurance">Endurance</option>
-          <option value="western">Western</option>
+          <option value="plano">Trabajo en plano / Doma deportiva</option>
+          <option value="completo">Concurso completo (CCE)</option>
+          <option value="polo">Polo</option>
+          <option value="endurance">Endurance / Raid</option>
+          <option value="campo">Equitación de campo</option>
           <option value="recreativo">Recreativo / Paseo</option>
         </select>
       </div>
@@ -850,6 +887,17 @@ textarea.inp{resize:vertical;min-height:70px}
           <option value="6">6 días</option>
         </select>
       </div>
+      <div class="grid2">
+        <div class="igrp"><label class="ilbl">¿Cuántas veces por semana saltás?</label>
+          <select class="inp" id="eq-jump-days">
+            <option value="1">1 vez</option>
+            <option value="2" selected>2 veces</option>
+            <option value="3">3 veces</option>
+          </select>
+        </div>
+        <div class="igrp"><label class="ilbl">Altura máxima actual (cm)</label>
+          <input class="inp" id="eq-jump-height" type="number" placeholder="Ej: 90"></div>
+      </div>
       <div class="igrp"><label class="ilbl">Limitaciones del caballo (opcional)</label>
         <input class="inp" id="eq-horse-limits" placeholder="Ej: problema de rodilla, recién herrado...">
       </div>
@@ -871,7 +919,7 @@ function hashPass(str){
 }
 function getUsers(){ try{ return JSON.parse(localStorage.getItem('rl_users')||'{}'); }catch{ return {}; } }
 function saveUsers(u){ localStorage.setItem('rl_users', JSON.stringify(u)); }
-function currentUser(){ return sessionStorage.getItem('rl_session')||''; }
+function currentUser(){ return localStorage.getItem('rl_session')||sessionStorage.getItem('rl_session')||''; }
 
 function switchLoginTab(tab){
   document.getElementById('ltab-login').classList.toggle('active', tab==='login');
@@ -906,13 +954,16 @@ function submitAuth(){
     if(!users[user]){ showLoginError('Usuario no encontrado'); return; }
     if(users[user].hash !== hashPass(pass)){ showLoginError('Contraseña incorrecta'); return; }
   }
-  sessionStorage.setItem('rl_session', user);
+  const remember = document.getElementById('auth-remember').checked;
+  if(remember){ localStorage.setItem('rl_session', user); }
+  else { sessionStorage.setItem('rl_session', user); }
   showApp(user);
 }
 
 function logout(){
   if(!confirm('¿Cerrar sesión?')) return;
   sessionStorage.removeItem('rl_session');
+  localStorage.removeItem('rl_session');
   location.reload();
 }
 
@@ -969,8 +1020,8 @@ const ROUTINES = [
   {name:"HIIT",desc:"Alta intensidad 25 minutos",exercises:["Jumping jacks 45s","Descanso 15s","Sentadillas con salto 45s","Descanso 15s","Push-ups 45s","Descanso 15s","Burpees 45s","Descanso 15s (×5 rondas)"]},
 ];
 
-const CAT_ICONS = {equitacion:'🐴',gym:'🏋️',dieta:'🥗',personal:'🌟',competencia:'🏆'};
-const TASK_CAT_ICONS = {alimentacion:'🌾',limpieza:'🧹',ejercicio:'🏇',salud:'💊',otro:'📌'};
+const CAT_ICONS = {equitacion:'🐴',gym:'<i data-lucide="dumbbell" style="width:18px;height:18px"></i>',dieta:'<i data-lucide="salad" style="width:18px;height:18px"></i>',personal:'<i data-lucide="sparkles" style="width:18px;height:18px"></i>',competencia:'<i data-lucide="trophy" style="width:18px;height:18px"></i>'};
+const TASK_CAT_ICONS = {alimentacion:'<i data-lucide="wheat" style="width:14px;height:14px"></i>',limpieza:'<i data-lucide="sparkle" style="width:14px;height:14px"></i>',ejercicio:'🏇',salud:'<i data-lucide="pill" style="width:14px;height:14px"></i>',otro:'<i data-lucide="map-pin" style="width:14px;height:14px"></i>'};
 
 // ─── TAB NAVIGATION ────────────────────────────────────────────────────────────
 document.querySelectorAll('.tab-btn').forEach(btn=>{
@@ -1090,14 +1141,15 @@ function renderTasks(container='horse-tasks-list'){
   const done = getDoneToday();
   const el = document.getElementById(container);
   if(!el) return;
-  if(!tasks.length){ el.innerHTML=`<div class="empty"><div class="empty-icon">📋</div><div class="empty-txt">Sin tareas. Agrega una arriba.</div></div>`; return; }
+  if(!tasks.length){ el.innerHTML=`<div class="empty"><div class="empty-icon"><i data-lucide="clipboard-list" style="width:36px;height:36px"></i></div><div class="empty-txt">Sin tareas. Agrega una arriba.</div></div>`; return; }
   el.innerHTML = tasks.map(t=>`
     <div class="chk ${done.includes(t.id)?'done':''}">
       <input type="checkbox" id="chk-${t.id}" ${done.includes(t.id)?'checked':''} onchange="toggleTask('${t.id}')">
-      <label for="chk-${t.id}">${TASK_CAT_ICONS[t.cat]||'📌'} ${t.text}</label>
+      <label for="chk-${t.id}">${TASK_CAT_ICONS[t.cat]||'<i data-lucide="map-pin" style="width:14px;height:14px"></i>'} ${t.text}</label>
       ${t.time?`<span class="chk-time">${t.time}</span>`:''}
-      <button class="chk-del" onclick="deleteTask('${t.id}')" title="Eliminar">✕</button>
+      <button class="chk-del" onclick="deleteTask('${t.id}')" title="Eliminar"><i data-lucide="x" style="width:12px;height:12px"></i></button>
     </div>`).join('');
+  try{ lucide.createIcons(); }catch(e){}
 }
 
 // ─── TRAINING ──────────────────────────────────────────────────────────────────
@@ -1117,18 +1169,19 @@ function renderTraining(){
   const sessions = S.get('training',[]);
   if(!sessions.length){ el.innerHTML=`<div class="empty"><div class="empty-icon">🏇</div><div class="empty-txt">Aún no hay sesiones registradas.</div></div>`; return; }
   el.innerHTML = sessions.map(s=>{
-    const stars='⭐'.repeat(Number(s.rating)||3);
+    const stars='★'.repeat(Number(s.rating)||3);
     return `<div class="log-item">
       <div class="log-hdr">
         <div>
           <div class="log-title">${s.type} ${stars}</div>
           <div class="log-date">${fmt(s.date)}${s.duration?' · '+s.duration+' min':''}</div>
         </div>
-        <button class="log-del" onclick="deleteTraining('${s.id}')">✕</button>
+        <button class="log-del" onclick="deleteTraining('${s.id}')"><i data-lucide="x" style="width:12px;height:12px"></i></button>
       </div>
       ${s.notes?`<div class="log-notes">${s.notes}</div>`:''}
     </div>`;
   }).join('');
+  try{ lucide.createIcons(); }catch(e){}
 }
 
 // ─── HEALTH ────────────────────────────────────────────────────────────────────
@@ -1145,14 +1198,15 @@ function renderHealth(){
   const el = document.getElementById('health-list');
   if(!el) return;
   const logs = S.get('health',[]);
-  if(!logs.length){ el.innerHTML=`<div class="empty"><div class="empty-icon">🩺</div><div class="empty-txt">Sin registros de salud aún.</div></div>`; return; }
+  if(!logs.length){ el.innerHTML=`<div class="empty"><div class="empty-icon"><i data-lucide="stethoscope" style="width:36px;height:36px"></i></div><div class="empty-txt">Sin registros de salud aún.</div></div>`; return; }
   el.innerHTML = logs.map(l=>`<div class="log-item">
     <div class="log-hdr">
       <div><div class="log-title">${l.type}</div><div class="log-date">${fmt(l.date)}</div></div>
-      <button class="log-del" onclick="deleteHealth('${l.id}')">✕</button>
+      <button class="log-del" onclick="deleteHealth('${l.id}')"><i data-lucide="x" style="width:12px;height:12px"></i></button>
     </div>
     ${l.notes?`<div class="log-notes">${l.notes}</div>`:''}
   </div>`).join('');
+  try{ lucide.createIcons(); }catch(e){}
 }
 
 // ─── GYM ───────────────────────────────────────────────────────────────────────
@@ -1177,16 +1231,18 @@ function renderGym(){
   const elToday = document.getElementById('gym-today-content');
   if(elToday){
     if(!todayWorkouts.length){
-      elToday.innerHTML=`<div class="empty"><div class="empty-icon">🏋️</div><div class="empty-txt">No has registrado entrenamiento hoy.<br><br></div></div><div style="text-align:center"><button class="btn btn-primary" onclick="openModal('modal-add-workout')">Registrar sesión</button></div>`;
+      elToday.innerHTML=`<div class="empty"><div class="empty-icon"><i data-lucide="dumbbell" style="width:36px;height:36px"></i></div><div class="empty-txt">No has registrado entrenamiento hoy.<br><br></div></div><div style="text-align:center"><button class="btn btn-primary" onclick="openModal('modal-add-workout')">Registrar sesión</button></div>`;
+      try{ lucide.createIcons(); }catch(e){}
     } else {
       elToday.innerHTML = todayWorkouts.map(w=>`<div class="card">
         <div class="flex justify-between items-center mb8">
           <div><span class="tag tag-brown">${w.type}</span>${w.duration?` <span class="tag tag-green" style="margin-left:6px">${w.duration} min</span>`:''}</div>
-          <button class="log-del" onclick="deleteWorkout('${w.id}')">✕</button>
+          <button class="log-del" onclick="deleteWorkout('${w.id}')"><i data-lucide="x" style="width:12px;height:12px"></i></button>
         </div>
         ${w.exercises.length?`<div style="margin-top:10px">${w.exercises.map(e=>`<div class="ex-row"><div class="ex-name">${e}</div></div>`).join('')}</div>`:''}
         ${w.notes?`<div class="text-sm text-muted" style="margin-top:10px">${w.notes}</div>`:''}
       </div>`).join('');
+      try{ lucide.createIcons(); }catch(e){}
     }
   }
 
@@ -1196,25 +1252,27 @@ function renderGym(){
     elRut.innerHTML = ROUTINES.map(r=>`<div class="card">
       <div class="card-title">${r.name}</div>
       <div class="text-sm text-muted mb12">${r.desc}</div>
-      ${r.exercises.map(e=>`<div class="chk"><div style="font-size:13px">▸ ${e}</div></div>`).join('')}
+      ${r.exercises.map(e=>`<div class="chk"><div style="font-size:13px"><i data-lucide="chevron-right" style="width:13px;height:13px"></i> ${e}</div></div>`).join('')}
       <div style="margin-top:14px">
         <button class="btn btn-secondary btn-sm" onclick="useRoutine('${r.name}','${r.exercises.join('|')}')">Usar esta rutina hoy</button>
       </div>
     </div>`).join('');
+    try{ lucide.createIcons(); }catch(e){}
   }
 
   // History
   const elHist = document.getElementById('gym-history-content');
   if(elHist){
-    if(!workouts.length){ elHist.innerHTML=`<div class="empty"><div class="empty-icon">📅</div><div class="empty-txt">Sin entrenamientos registrados.</div></div>`; return; }
+    if(!workouts.length){ elHist.innerHTML=`<div class="empty"><div class="empty-icon"><i data-lucide="calendar" style="width:36px;height:36px"></i></div><div class="empty-txt">Sin entrenamientos registrados.</div></div>`; try{ lucide.createIcons(); }catch(e){} return; }
     elHist.innerHTML = workouts.map(w=>`<div class="log-item">
       <div class="log-hdr">
         <div><div class="log-title">${w.type}${w.duration?' · '+w.duration+' min':''}</div><div class="log-date">${fmt(w.date)}</div></div>
-        <button class="log-del" onclick="deleteWorkout('${w.id}')">✕</button>
+        <button class="log-del" onclick="deleteWorkout('${w.id}')"><i data-lucide="x" style="width:12px;height:12px"></i></button>
       </div>
       ${w.exercises.length?`<div class="log-notes">${w.exercises.join(' · ')}</div>`:''}
       ${w.notes?`<div class="log-notes">${w.notes}</div>`:''}
     </div>`).join('');
+    try{ lucide.createIcons(); }catch(e){}
   }
 }
 
@@ -1244,7 +1302,7 @@ function setWater(n){ const w=S.get('water',{}); w[today()]=n; S.set('water',w);
 
 function renderDiet(){
   const SLOTS = ['Desayuno','Almuerzo','Merienda','Cena'];
-  const SLOT_ICONS = {Desayuno:'🌅',Almuerzo:'☀️',Merienda:'🍎',Cena:'🌙'};
+  const SLOT_ICONS = {Desayuno:'<i data-lucide="sunrise" style="width:14px;height:14px"></i>',Almuerzo:'<i data-lucide="sun" style="width:14px;height:14px"></i>',Merienda:'<i data-lucide="apple" style="width:14px;height:14px"></i>',Cena:'<i data-lucide="moon" style="width:14px;height:14px"></i>'};
   const todayMeals = getMeals().filter(m=>m.date===today());
   const totalCals = todayMeals.reduce((s,m)=>s+m.cals,0);
   const calGoal = S.get('cal_goal',2000);
@@ -1257,7 +1315,7 @@ function renderDiet(){
     elToday.innerHTML=`
       <div class="grid2 mb16">
         <div class="card" style="text-align:center">
-          <div class="card-title" style="justify-content:center">🔥 Calorías</div>
+          <div class="card-title" style="justify-content:center"><i data-lucide="flame" style="width:16px;height:16px"></i> Calorías</div>
           <div style="font-size:28px;font-weight:700;color:var(--primary)">${totalCals}</div>
           <div class="text-sm text-muted mb8">/ ${calGoal} kcal</div>
           <div class="progress"><div class="progress-fill prog-primary" style="width:${pct}%"></div></div>
@@ -1266,14 +1324,14 @@ function renderDiet(){
           </div>
         </div>
         <div class="card">
-          <div class="card-title">💧 Agua</div>
+          <div class="card-title"><i data-lucide="droplets" style="width:16px;height:16px"></i> Agua</div>
           <div class="water-grid" id="water-grid"></div>
           <div class="text-sm text-muted" style="margin-top:10px">${water} / ${waterGoal} vasos</div>
         </div>
       </div>
       <div class="card">
         <div class="flex justify-between items-center mb12">
-          <div class="card-title" style="margin:0">🍽️ Comidas de hoy</div>
+          <div class="card-title" style="margin:0"><i data-lucide="salad" style="width:16px;height:16px"></i> Comidas de hoy</div>
           <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-meal')">+ Agregar</button>
         </div>
         ${SLOTS.map(slot=>{
@@ -1287,15 +1345,17 @@ function renderDiet(){
             ${items.length ? items.map(m=>`<div class="meal-item">
               <span>${m.food}</span>
               <span class="meal-cals">${m.cals?m.cals+' kcal':''}</span>
-              <button class="btn-icon" onclick="deleteMeal('${m.id}')" style="font-size:12px">✕</button>
+              <button class="btn-icon" onclick="deleteMeal('${m.id}')" style="font-size:12px"><i data-lucide="x" style="width:12px;height:12px"></i></button>
             </div>`).join('') : `<div class="text-muted text-sm" style="padding:4px 0">Sin registros</div>`}
           </div>`;
         }).join('')}
       </div>`;
+    try{ lucide.createIcons(); }catch(e){}
     // render water glasses
     const wg = document.getElementById('water-grid');
     if(wg){
-      wg.innerHTML = Array.from({length:waterGoal},(_,i)=>`<div class="wglass ${i<water?'full':''}" onclick="toggleWater(${i+1})" title="${i+1} vaso${i?'s':''}">💧</div>`).join('');
+      wg.innerHTML = Array.from({length:waterGoal},(_,i)=>`<div class="wglass ${i<water?'full':''}" onclick="toggleWater(${i+1})" title="${i+1} vaso${i?'s':''}"><i data-lucide="droplets" style="width:17px;height:17px"></i></div>`).join('');
+      try{ lucide.createIcons(); }catch(e){}
     }
   }
 
@@ -1303,7 +1363,7 @@ function renderDiet(){
   if(elHist){
     const allMeals = getMeals();
     const days = [...new Set(allMeals.map(m=>m.date))].sort((a,b)=>b.localeCompare(a));
-    if(!days.length){ elHist.innerHTML=`<div class="empty"><div class="empty-icon">🥗</div><div class="empty-txt">Sin historial aún.</div></div>`; return; }
+    if(!days.length){ elHist.innerHTML=`<div class="empty"><div class="empty-icon"><i data-lucide="salad" style="width:36px;height:36px"></i></div><div class="empty-txt">Sin historial aún.</div></div>`; try{ lucide.createIcons(); }catch(e){} return; }
     elHist.innerHTML = days.slice(0,14).map(d=>{
       const dayMeals = allMeals.filter(m=>m.date===d);
       const cals = dayMeals.reduce((s,m)=>s+m.cals,0);
@@ -1346,22 +1406,23 @@ function renderGoals(){
   const goals = S.get('goals',[]);
   const active = goals.filter(g=>!g.done);
   const done = goals.filter(g=>g.done);
-  if(!goals.length){ el.innerHTML=`<div class="empty"><div class="empty-icon">🎯</div><div class="empty-txt">Agrega tu primer objetivo.</div></div>`; return; }
+  if(!goals.length){ el.innerHTML=`<div class="empty"><div class="empty-icon"><i data-lucide="target" style="width:36px;height:36px"></i></div><div class="empty-txt">Agrega tu primer objetivo.</div></div>`; try{ lucide.createIcons(); }catch(e){} return; }
   const render = list=>list.map(g=>`<div class="goal-item ${g.done?'done':''}">
     <div class="goal-hdr">
-      <div class="goal-icon">${CAT_ICONS[g.cat]||'🌟'}</div>
+      <div class="goal-icon">${CAT_ICONS[g.cat]||'<i data-lucide="sparkles" style="width:18px;height:18px"></i>'}</div>
       <div class="goal-body">
         <div class="goal-title">${g.title}</div>
-        <div class="goal-meta">${g.deadline?'📅 '+fmt(g.deadline):''} ${g.notes?'· '+g.notes:''}</div>
+        <div class="goal-meta">${g.deadline?'<i data-lucide="calendar" style="width:12px;height:12px"></i> '+fmt(g.deadline):''} ${g.notes?'· '+g.notes:''}</div>
       </div>
       <div class="flex gap8">
-        <button class="btn-icon" onclick="toggleGoal('${g.id}')" title="${g.done?'Reabrir':'Completar'}">${g.done?'↩':'✓'}</button>
-        <button class="btn-icon" onclick="deleteGoal('${g.id}')" title="Eliminar">🗑</button>
+        <button class="btn-icon" onclick="toggleGoal('${g.id}')" title="${g.done?'Reabrir':'Completar'}">${g.done?'<i data-lucide="undo-2" style="width:14px;height:14px"></i>':'<i data-lucide="check" style="width:14px;height:14px"></i>'}</button>
+        <button class="btn-icon" onclick="deleteGoal('${g.id}')" title="Eliminar"><i data-lucide="trash-2" style="width:14px;height:14px"></i></button>
       </div>
     </div>
   </div>`).join('');
   el.innerHTML = (active.length?`<div style="margin-bottom:4px;font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">Activos (${active.length})</div>`+render(active):'') +
     (done.length?`<div style="margin:12px 0 4px;font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">Completados (${done.length})</div>`+render(done):'');
+  try{ lucide.createIcons(); }catch(e){}
 }
 
 // ─── HABITS ────────────────────────────────────────────────────────────────────
@@ -1371,9 +1432,9 @@ function renderHabits(){
   const DAYS = ['D','L','M','M','J','V','S'];
   const HABIT_LIST = [
     {key:'horse_done', label:'🐴 Tareas del caballo'},
-    {key:'workout_done', label:'🏋️ Entrenamiento en gym'},
-    {key:'diet_logged', label:'🥗 Comidas registradas'},
-    {key:'water_done', label:'💧 Agua completa (8 vasos)'},
+    {key:'workout_done', label:'<i data-lucide="dumbbell" style="width:15px;height:15px"></i> Entrenamiento en gym'},
+    {key:'diet_logged', label:'<i data-lucide="salad" style="width:15px;height:15px"></i> Comidas registradas'},
+    {key:'water_done', label:'<i data-lucide="droplets" style="width:15px;height:15px"></i> Agua completa (8 vasos)'},
   ];
 
   // build last 28 days
@@ -1409,7 +1470,7 @@ function renderHabits(){
     return `<div class="card">
       <div class="flex justify-between items-center mb12">
         <div class="card-title" style="margin:0">${h.label}</div>
-        <span class="tag tag-gold">🔥 ${streak} días</span>
+        <span class="tag tag-gold"><i data-lucide="flame" style="width:13px;height:13px"></i> ${streak} días</span>
       </div>
       <div class="habit-labels">${DAYS.map(d=>`<div class="habit-label">${d}</div>`).join('')}</div>
       <div class="habit-grid">
@@ -1417,6 +1478,7 @@ function renderHabits(){
       </div>
     </div>`;
   }).join('');
+  try{ lucide.createIcons(); }catch(e){}
 }
 
 function calcStreak(doneSet, days){
@@ -1438,22 +1500,23 @@ function renderAchievements(){
   const daysWithTasks = Object.values(tasksData).filter(arr=>arr.length>0).length;
 
   const achs = [
-    {icon:'🌟',title:'Primera sesión',desc:'Registraste tu primer entrenamiento en gym',unlocked:workouts.length>=1},
-    {icon:'💪',title:'10 entrenamientos',desc:'Completaste 10 sesiones de gym',unlocked:workouts.length>=10},
-    {icon:'🏋️',title:'Mes de gym',desc:'30 entrenamientos registrados',unlocked:workouts.length>=30},
+    {icon:'<i data-lucide="sparkles" style="width:24px;height:24px"></i>',title:'Primera sesión',desc:'Registraste tu primer entrenamiento en gym',unlocked:workouts.length>=1},
+    {icon:'<i data-lucide="dumbbell" style="width:24px;height:24px"></i>',title:'10 entrenamientos',desc:'Completaste 10 sesiones de gym',unlocked:workouts.length>=10},
+    {icon:'<i data-lucide="dumbbell" style="width:24px;height:24px"></i>',title:'Mes de gym',desc:'30 entrenamientos registrados',unlocked:workouts.length>=30},
     {icon:'🐴',title:'Primer entreno ecuestre',desc:'Registraste tu primera sesión con el caballo',unlocked:training.length>=1},
     {icon:'🏇',title:'Amazona dedicada',desc:'20 sesiones ecuestres registradas',unlocked:training.length>=20},
-    {icon:'🎯',title:'Primer objetivo',desc:'Completaste tu primer objetivo',unlocked:goals.length>=1},
-    {icon:'🏆',title:'Imparable',desc:'5 objetivos completados',unlocked:goals.length>=5},
-    {icon:'🔥',title:'Constancia',desc:'Cuidaste a tu caballo 7 días seguidos',unlocked:daysWithTasks>=7},
-    {icon:'💎',title:'Nivel élite',desc:'30 días de cuidado del caballo',unlocked:daysWithTasks>=30},
-    {icon:'🌈',title:'Vida completa',desc:'Registraste gym + dieta + caballo el mismo día',unlocked:checkAllSameDay()},
+    {icon:'<i data-lucide="target" style="width:24px;height:24px"></i>',title:'Primer objetivo',desc:'Completaste tu primer objetivo',unlocked:goals.length>=1},
+    {icon:'<i data-lucide="trophy" style="width:24px;height:24px"></i>',title:'Imparable',desc:'5 objetivos completados',unlocked:goals.length>=5},
+    {icon:'<i data-lucide="flame" style="width:24px;height:24px"></i>',title:'Constancia',desc:'Cuidaste a tu caballo 7 días seguidos',unlocked:daysWithTasks>=7},
+    {icon:'<i data-lucide="gem" style="width:24px;height:24px"></i>',title:'Nivel élite',desc:'30 días de cuidado del caballo',unlocked:daysWithTasks>=30},
+    {icon:'<i data-lucide="star" style="width:24px;height:24px"></i>',title:'Vida completa',desc:'Registraste gym + dieta + caballo el mismo día',unlocked:checkAllSameDay()},
   ];
 
   el.innerHTML=`<div class="card">${achs.map(a=>`<div class="ach ${a.unlocked?'':'locked'}">
     <div class="ach-icon">${a.icon}</div>
-    <div><div class="ach-title">${a.title}${a.unlocked?' ✓':''}</div><div class="ach-desc">${a.desc}</div></div>
+    <div><div class="ach-title">${a.title}${a.unlocked?' <i data-lucide="check" style="width:14px;height:14px"></i>':''}</div><div class="ach-desc">${a.desc}</div></div>
   </div>`).join('')}</div>`;
+  try{ lucide.createIcons(); }catch(e){}
 }
 
 function checkAllSameDay(){
@@ -1505,9 +1568,10 @@ function renderInicio(){
 
   document.getElementById('stats-grid').innerHTML=`
     <div class="stat"><div class="stat-icon">🐴</div><div class="stat-val">${done.length}/${tasks.length}</div><div class="stat-lbl">Tareas caballo</div></div>
-    <div class="stat"><div class="stat-icon">🏋️</div><div class="stat-val">${todayWorkout?'✓':'—'}</div><div class="stat-lbl">Gym hoy</div></div>
-    <div class="stat"><div class="stat-icon">🔥</div><div class="stat-val">${totalCals}</div><div class="stat-lbl">Kcal hoy</div></div>
-    <div class="stat"><div class="stat-icon">💧</div><div class="stat-val">${water}/8</div><div class="stat-lbl">Vasos agua</div></div>`;
+    <div class="stat"><div class="stat-icon"><i data-lucide="dumbbell" style="width:26px;height:26px"></i></div><div class="stat-val">${todayWorkout?'<i data-lucide="check" style="width:22px;height:22px"></i>':'—'}</div><div class="stat-lbl">Gym hoy</div></div>
+    <div class="stat"><div class="stat-icon"><i data-lucide="flame" style="width:26px;height:26px"></i></div><div class="stat-val">${totalCals}</div><div class="stat-lbl">Kcal hoy</div></div>
+    <div class="stat"><div class="stat-icon"><i data-lucide="droplets" style="width:26px;height:26px"></i></div><div class="stat-val">${water}/8</div><div class="stat-lbl">Vasos agua</div></div>`;
+  try{ lucide.createIcons(); }catch(e){}
 
   // Quick horse tasks
   const qtEl = document.getElementById('inicio-horse-tasks');
@@ -1516,21 +1580,24 @@ function renderInicio(){
     qtEl.innerHTML = sorted.length ? sorted.map(t=>`
       <div class="chk ${done.includes(t.id)?'done':''}">
         <input type="checkbox" id="iq-${t.id}" ${done.includes(t.id)?'checked':''} onchange="toggleTask('${t.id}')">
-        <label for="iq-${t.id}">${TASK_CAT_ICONS[t.cat]||'📌'} ${t.text}</label>
+        <label for="iq-${t.id}">${TASK_CAT_ICONS[t.cat]||'<i data-lucide="map-pin" style="width:14px;height:14px"></i>'} ${t.text}</label>
         ${t.time?`<span class="chk-time">${t.time}</span>`:''}
       </div>`).join('') : `<div class="text-sm text-muted">Sin tareas. Ve a "Mi Caballo" para agregar.</div>`;
+    try{ lucide.createIcons(); }catch(e){}
   }
 
   // Water + gym quick
   const wEl = document.getElementById('inicio-water');
   if(wEl){
-    wEl.innerHTML=`<div class="water-grid">${Array.from({length:8},(_,i)=>`<div class="wglass ${i<water?'full':''}" onclick="toggleWater(${i+1})">💧</div>`).join('')}</div>`;
+    wEl.innerHTML=`<div class="water-grid">${Array.from({length:8},(_,i)=>`<div class="wglass ${i<water?'full':''}" onclick="toggleWater(${i+1})"><i data-lucide="droplets" style="width:17px;height:17px"></i></div>`).join('')}</div>`;
+    try{ lucide.createIcons(); }catch(e){}
   }
   const gEl = document.getElementById('inicio-gym');
   if(gEl){
     gEl.innerHTML = todayWorkout
-      ? `<div class="tag tag-green">✓ Entrenamiento registrado hoy</div>`
+      ? `<div class="tag tag-green"><i data-lucide="check" style="width:12px;height:12px"></i> Entrenamiento registrado hoy</div>`
       : `<div class="text-sm text-muted">Sin sesión hoy. <button class="btn btn-secondary btn-sm" style="margin-left:6px" onclick="document.querySelector('[data-tab=gimnasio]').click()">Ir al gym</button></div>`;
+    try{ lucide.createIcons(); }catch(e){}
   }
 }
 
@@ -1545,7 +1612,7 @@ let calYear = new Date().getFullYear();
 let calMonth = new Date().getMonth();
 
 const CAL_COLORS = {vet:'#4A7A9B',herrador:'#8B4513',vacuna:'#4A7C59',despar:'#DAA520',dent:'#C0392B',comp:'#9B59B6',otro:'#888'};
-const CAL_LABELS = {vet:'🩺 Veterinario',herrador:'🔨 Herrador',vacuna:'💉 Vacuna',despar:'🧪 Desparasitación',dent:'🦷 Dentista',comp:'🏆 Competencia',otro:'📌 Otro'};
+const CAL_LABELS = {vet:'Veterinario',herrador:'Herrador',vacuna:'Vacuna',despar:'Desparasitación',dent:'Dentista',comp:'Competencia',otro:'Otro'};
 
 function calNav(dir){ calMonth+=dir; if(calMonth>11){calMonth=0;calYear++;} if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
 
@@ -1620,9 +1687,10 @@ function renderCalendar(){
           <div class="cal-event-date">${fmt(e.date)}${e.notes?' · '+e.notes:''}</div>
         </div>
         ${soon?`<span class="cal-event-soon">${soon}</span>`:''}
-        <button class="log-del" onclick="deleteCalEvent('${e.id}')">✕</button>
+        <button class="log-del" onclick="deleteCalEvent('${e.id}')"><i data-lucide="x" style="width:12px;height:12px"></i></button>
       </div>`;
     }).join('');
+    try{ lucide.createIcons(); }catch(e){}
   }
 }
 
@@ -1632,20 +1700,31 @@ function calDayClick(dateStr){
 }
 
 // ─── PREMIUM ──────────────────────────────────────────────────────────────────
-const PREMIUM_CODE = 'RIDER2024';
+const PREMIUM_CODES = ['RIDER2024','POTRERO24'];
 function isPremium(){ return S.get('premium',false); }
+
+function toggleCoupon(){
+  const el = document.getElementById('coupon-area');
+  el.classList.toggle('open');
+}
+
+function payWithMP(){
+  // Reemplazá este link con tu link de pago real de Mercado Pago
+  const MP_LINK = 'https://mpago.la/1CLxvgo';
+  window.open(MP_LINK, '_blank');
+}
 
 function activatePremium(){
   const code = document.getElementById('premium-code').value.trim().toUpperCase();
   const errEl = document.getElementById('premium-error');
-  if(code !== PREMIUM_CODE){ errEl.textContent='Código incorrecto'; errEl.classList.add('show'); return; }
+  if(!PREMIUM_CODES.includes(code)){ errEl.textContent='Código incorrecto. Verificá que esté bien escrito.'; errEl.classList.add('show'); return; }
   S.set('premium',true);
   closeModal('modal-premium');
   document.getElementById('premium-code').value='';
   errEl.classList.remove('show');
   renderGymPersonal();
   renderEquestrianPlan();
-  alert('✅ ¡Premium activado! Ya podés usar el plan personalizado.');
+  alert('¡Premium activado! Ya podés usar el plan personalizado.');
 }
 
 // ─── GYM PERSONAL ─────────────────────────────────────────────────────────────
@@ -1666,7 +1745,7 @@ function updateGymQUI(){
     document.getElementById('gym-q-'+i).classList.toggle('active', i===gymQStep);
   }
   document.getElementById('gym-q-back').style.display = gymQStep>1?'':'none';
-  document.getElementById('gym-q-next').textContent = gymQStep===GYM_Q_TOTAL?'Generar mi plan 🎯':'Siguiente →';
+  document.getElementById('gym-q-next').textContent = gymQStep===GYM_Q_TOTAL?'Generar mi plan':'Siguiente';
   const dots = document.getElementById('gym-q-progress');
   dots.innerHTML = Array.from({length:GYM_Q_TOTAL},(_,i)=>`<div class="q-dot ${i<gymQStep?'done':''}"></div>`).join('');
 }
@@ -1791,19 +1870,20 @@ function renderGymPersonal(){
   if(!el) return;
   if(!isPremium()){
     el.innerHTML=`<div class="premium-lock">
-      <div class="premium-icon">💎</div>
+      <div class="premium-icon"><i data-lucide="gem" style="width:44px;height:44px"></i></div>
       <div class="premium-title">Plan de Gym Personalizado</div>
       <div class="premium-desc">Tu plan de entrenamiento 100% adaptado a tu cuerpo, objetivo y equipamiento disponible. Incluye rutinas semanales, ejercicios específicos, series, repeticiones y progresión.</div>
-      <div class="premium-price">$4.99 USD</div>
-      <div class="premium-period">pago único · acceso de por vida</div>
-      <button class="btn btn-primary" onclick="openModal('modal-premium')" style="margin-right:8px">🔑 Tengo un código</button>
+      <div class="premium-price">$2.500 ARS</div>
+      <div class="premium-period">por mes · cancelás cuando quieras</div>
+      <button class="btn btn-primary" onclick="openModal('modal-premium')"><i data-lucide="gem" style="width:14px;height:14px"></i> Desbloquear Premium</button>
     </div>`;
+    try{ lucide.createIcons(); }catch(e){}
     return;
   }
   const plan = S.get('gym_plan', null);
   if(!plan){
     el.innerHTML=`<div class="card" style="text-align:center;padding:32px">
-      <div style="font-size:40px;margin-bottom:12px">🏋️</div>
+      <div style="font-size:40px;margin-bottom:12px"><i data-lucide="dumbbell" style="width:40px;height:40px"></i></div>
       <div style="font-size:16px;font-weight:600;margin-bottom:8px">Creá tu plan personalizado</div>
       <div class="text-sm text-muted mb16">Respondé unas preguntas y generamos tu plan ideal</div>
       <button class="btn btn-primary" onclick="gymQStep=1;updateGymQUI();openModal('modal-gym-q')">Empezar cuestionario</button>
@@ -1816,13 +1896,13 @@ function renderGymPersonal(){
 
   let html = `<div class="card mb16">
     <div class="flex justify-between items-center mb12">
-      <div class="card-title" style="margin:0">💎 Tu Plan Personal</div>
+      <div class="card-title" style="margin:0"><i data-lucide="gem" style="width:16px;height:16px"></i> Tu Plan Personal</div>
       <button class="btn btn-secondary btn-sm" onclick="gymQStep=1;updateGymQUI();openModal('modal-gym-q')">Actualizar</button>
     </div>
     <div class="grid3" style="margin-bottom:12px">
-      <div class="stat"><div class="stat-icon">⚖️</div><div class="stat-val">${p.weight}kg</div><div class="stat-lbl">Peso</div></div>
-      <div class="stat"><div class="stat-icon">📏</div><div class="stat-val">${p.height}cm</div><div class="stat-lbl">Altura</div></div>
-      <div class="stat"><div class="stat-icon">🔢</div><div class="stat-val">${p.bmi}</div><div class="stat-lbl">IMC</div></div>
+      <div class="stat"><div class="stat-icon"><i data-lucide="activity" style="width:26px;height:26px"></i></div><div class="stat-val">${p.weight}kg</div><div class="stat-lbl">Peso</div></div>
+      <div class="stat"><div class="stat-icon"><i data-lucide="bar-chart" style="width:26px;height:26px"></i></div><div class="stat-val">${p.height}cm</div><div class="stat-lbl">Altura</div></div>
+      <div class="stat"><div class="stat-icon"><i data-lucide="target" style="width:26px;height:26px"></i></div><div class="stat-val">${p.bmi}</div><div class="stat-lbl">IMC</div></div>
     </div>
     <div class="flex gap8" style="flex-wrap:wrap">
       <span class="tag tag-brown">${goalLabels[p.goal]||p.goal}</span>
@@ -1830,29 +1910,30 @@ function renderGymPersonal(){
       <span class="tag tag-green">${p.days} días/semana</span>
       <span class="tag tag-gold">${p.duration} min/sesión</span>
     </div>
-    ${plan.emphasis?`<div class="text-sm" style="margin-top:12px;padding:10px;background:#FFF5EE;border-radius:8px;color:var(--primary)">💡 ${plan.emphasis}</div>`:''}
+    ${plan.emphasis?`<div class="text-sm" style="margin-top:12px;padding:10px;background:#FFF5EE;border-radius:8px;color:var(--primary)"><i data-lucide="lightbulb" style="width:14px;height:14px"></i> ${plan.emphasis}</div>`:''}
   </div>`;
 
   html += plan.days.map((d,i)=>{
-    if(d.type==='rest') return `<div class="plan-day"><div class="plan-day-header"><div><div class="plan-day-title">${d.day}</div><div class="plan-day-sub">🧘 Descanso — movilidad suave</div></div></div></div>`;
+    if(d.type==='rest') return `<div class="plan-day"><div class="plan-day-header"><div><div class="plan-day-title">${d.day}</div><div class="plan-day-sub"><i data-lucide="person-standing" style="width:13px;height:13px"></i> Descanso — movilidad suave</div></div></div></div>`;
     return `<div class="plan-day">
       <div class="plan-day-header" onclick="togglePlanDay('pd${i}')">
         <div><div class="plan-day-title">${d.day} — ${d.focus}</div><div class="plan-day-sub">${d.main.length} ejercicios · ${d.main[0]?.sets||3} series</div></div>
-        <span>▾</span>
+        <span><i data-lucide="chevron-down" style="width:14px;height:14px"></i></span>
       </div>
       <div class="plan-day-body" id="pd${i}">
-        <div class="plan-section-title">🔥 Calentamiento (5-8 min)</div>
-        ${d.warmup.map(e=>`<div class="plan-ex"><div class="plan-ex-icon">▸</div><div class="plan-ex-name">${e}</div></div>`).join('')}
-        <div class="plan-section-title">💪 Bloque principal</div>
-        ${d.main.map(e=>`<div class="plan-ex"><div class="plan-ex-icon">🏋️</div><div class="plan-ex-name">${e.name}</div><div class="plan-ex-detail">${e.sets}×${e.reps} · desc ${e.rest}</div></div>`).join('')}
-        ${d.cardio?.length?`<div class="plan-section-title">🏃 Cardio</div>${d.cardio.map(e=>`<div class="plan-ex"><div class="plan-ex-icon">⚡</div><div class="plan-ex-name">${e}</div></div>`).join('')}`:''}
-        <div class="plan-section-title">🧘 Vuelta a la calma</div>
-        ${d.cooldown.map(e=>`<div class="plan-ex"><div class="plan-ex-icon">🌿</div><div class="plan-ex-name">${e}</div></div>`).join('')}
+        <div class="plan-section-title"><i data-lucide="flame" style="width:13px;height:13px"></i> Calentamiento (5-8 min)</div>
+        ${d.warmup.map(e=>`<div class="plan-ex"><div class="plan-ex-icon"><i data-lucide="chevron-right" style="width:13px;height:13px"></i></div><div class="plan-ex-name">${e}</div></div>`).join('')}
+        <div class="plan-section-title"><i data-lucide="dumbbell" style="width:13px;height:13px"></i> Bloque principal</div>
+        ${d.main.map(e=>`<div class="plan-ex"><div class="plan-ex-icon"><i data-lucide="dumbbell" style="width:13px;height:13px"></i></div><div class="plan-ex-name">${e.name}</div><div class="plan-ex-detail">${e.sets}×${e.reps} · desc ${e.rest}</div></div>`).join('')}
+        ${d.cardio?.length?`<div class="plan-section-title"><i data-lucide="activity" style="width:13px;height:13px"></i> Cardio</div>${d.cardio.map(e=>`<div class="plan-ex"><div class="plan-ex-icon"><i data-lucide="zap" style="width:13px;height:13px"></i></div><div class="plan-ex-name">${e}</div></div>`).join('')}`:''}
+        <div class="plan-section-title"><i data-lucide="person-standing" style="width:13px;height:13px"></i> Vuelta a la calma</div>
+        ${d.cooldown.map(e=>`<div class="plan-ex"><div class="plan-ex-icon"><i data-lucide="leaf" style="width:13px;height:13px"></i></div><div class="plan-ex-name">${e}</div></div>`).join('')}
       </div>
     </div>`;
   }).join('');
 
   el.innerHTML = html;
+  try{ lucide.createIcons(); }catch(e){}
 }
 
 function togglePlanDay(id){ const el=document.getElementById(id); if(el) el.classList.toggle('open'); }
@@ -1867,46 +1948,169 @@ function eqQNav(dir){
   document.getElementById('eq-q-1').classList.toggle('active', eqQStep===1);
   document.getElementById('eq-q-2').classList.toggle('active', eqQStep===2);
   document.getElementById('eq-q-back').style.display = eqQStep>1?'':'none';
-  document.getElementById('eq-q-next').textContent = eqQStep===EQ_Q_TOTAL?'Generar plan ⭐':'Siguiente →';
+  document.getElementById('eq-q-next').textContent = eqQStep===EQ_Q_TOTAL?'Generar plan':'Siguiente';
   const dots = document.getElementById('eq-q-progress');
   dots.innerHTML = Array.from({length:EQ_Q_TOTAL},(_,i)=>`<div class="q-dot ${i<eqQStep?'done':''}"></div>`).join('');
 }
 
 const EQ_EXERCISES = {
   principiante:{
-    tierra:['Trabajo en mano al paso','Longitud en paso (10 min)','Flexibilidad de cuello en mano','Acostumbramiento a objetos nuevos','Trabajo de voz: para y camina'],
-    montado:['Paso con riendas largas y suaves','Transición paso → halt','Trote en diagonal (posting)','Círculo 20m en paso','Ejercicios sin estribos al paso','Cambios de dirección en paso'],
-    tierra_extra:['Cepillado y limpieza antes y después','Observación del lenguaje corporal']
+    tierra:[
+      'Trabajo en cuerda al paso (10 min) — presentación tranquila',
+      'Cuerda al trote corto, riendas largas',
+      'Flexiones laterales de cuello en mano — ambos lados',
+      'Acostumbramiento a objetos: bolsas, paraguas, ruidos',
+      'Trabajo de voz: "para", "camina", "trote" con refuerzo positivo',
+      'Palos en el piso en mano — que los pise sin apuro',
+    ],
+    plano:[
+      'Entrada en calor: 10 min de paso con riendas largas',
+      'Trote tranquilo por pista completa — ambas manos',
+      'Palos en el piso al trote (3 palos, 1.30m entre sí)',
+      'Transiciones paso-trote-paso — que responda suave',
+      'Cambios de mano al trote por la diagonal',
+      'Galope corto ambas manos — 2 minutos cada lado',
+      'Trabajo sin estribos al trote: 5 minutos',
+    ],
+    salto:[
+      'Palos en el piso al paso — que los pise sin apuro',
+      'Palos en el piso al trote — mantener el ritmo',
+      'Palo elevado de un lado (20cm) al trote — sin apurarse',
+      'Barra baja (30cm) al trote — aproximación recta',
+    ],
+    tierra_extra:[
+      'Cepillado completo antes y después — parte del vínculo',
+      'Observar postura y comportamiento del caballo',
+      'Trabajo de confianza: que el jinete se mueva alrededor sin susto',
+    ]
   },
   iniciado:{
-    tierra:['Longitud en trote (10-15 min)','Trabajo de voz en galope','Laterales en mano básicos','Flexión de remos'],
-    montado:['Trote sentado 5 min','Transiciones paso-trote','Galope de trabajo (2 minutos)','Círculo 15m en trote','Serpentinas simples en trote','Cambios de rein al trote'],
-    tierra_extra:['Cavalettis en mano','Trabajo sobre terreno variado']
+    tierra:[
+      'Cuerda al trote sostenido 10 min — cambio de mano',
+      'Cuerda al galope corto ambas manos — 3 min c/lado',
+      'Palos en el piso en cuerda al trote',
+      'Flexiones de cuello en mano: que ceda a la rienda',
+      'Rein-back en mano: 3-4 pasos atrás con calma',
+    ],
+    plano:[
+      'Entrada en calor: paso largo 10 min — riendas largas',
+      'Trote extendido por los largos de la pista',
+      'Trote tranquilo por las curvas — regular el ritmo',
+      'Palos en el piso al trote — 4 palos seguidos',
+      'Galope corto ambas manos — tranquilo y parejo',
+      'Transiciones trote-galope-trote por la pista',
+      'Trabajo sin estribos al trote: 8 minutos',
+      'Cambios de mano al galope pasando por el trote',
+    ],
+    salto:[
+      'Palos en el piso al galope — ritmo tranquilo',
+      'Barra baja (40-50cm) desde el trote — derecho',
+      'Barra baja desde el galope — sin apurarse',
+      'Palo en el piso + barra: gimnasia de dos elementos',
+      'Trabajo de círculo y encarar: llegar derecho al obstáculo',
+    ],
+    tierra_extra:[
+      'Trabajo de longitud con palos en el piso',
+      'Paseo corto fuera de la pista para ambientar',
+    ]
   },
   intermedio:{
-    tierra:['Longitud con cavalettis','Trabajo de collection en mano','Shoulder-in en mano','Laterales: rein-back en mano'],
-    montado:['Transiciones dentro del trote (extensión/recolección)','Travers básico','Shoulder-in al trote','Half-pass al trote','Counter-canter corto','Leg-yield en diagonal','Caballos elevados en espirales'],
-    tierra_extra:['Trabajo de in-hand collection','Gymnastic jumping (si es salto)']
+    tierra:[
+      'Cuerda con palos y barras bajas — fluidez de movimiento',
+      'Trabajo en mano: flexión lateral y longitudinal',
+      'Cuerda sin cabezada — trabajo de confianza y sensibilidad',
+      'Preparación física: estiramiento después del trabajo',
+    ],
+    plano:[
+      'Entrada en calor: paso libre 10 min',
+      'Trote extendido por los largos — alargar el paso',
+      'Trote tranquilo por las curvas — no apurarse',
+      'Palos en el piso al trote: 5-6 palos seguidos',
+      'Palos en el piso al galope: 3 palos con una galopa entre sí',
+      'Galope corto: tranquilo, parejo, equilibrado',
+      'Galope largo por el largo de pista — soltar',
+      'Transiciones galope largo → galope corto → trote',
+      'Trabajo sin estribos al trote y galope corto',
+    ],
+    salto:[
+      'Gimnasia de salto: palo en piso + barra + vertical (3 elementos)',
+      'Vertical 60-80cm desde el galope — regulación de impulso',
+      'Línea de dos obstáculos con 4 galopes de distancia',
+      'Trabajo de curvas: encarar el obstáculo desde el costado',
+      'Recorrido corto de 4-5 obstáculos — fluidez entre barras',
+      'Oxer simple desde el galope — amplitud',
+      'Trabajo de distancias largas y cortas en línea',
+    ],
+    tierra_extra:[
+      'Trabajo de campo: terreno variado, cuestas suaves',
+      'Paseo largo para descomprimir después del trabajo intenso',
+    ]
   },
   avanzado:{
-    tierra:['Piaffe en mano (preparación)','Passage en mano','Pirouette preparación en mano','Half-pass en mano'],
-    montado:['Flying changes simples','Half-pass al galope','Trabajo de collection avanzado','Pirouette al galope (introducción)','Tempi changes 4 tiempos','Piaffe montado (preparación)'],
-    tierra_extra:['Refinamiento de movimientos de competencia']
+    tierra:[
+      'Trabajo de equilibrio en cuerda sin cabezada',
+      'In-hand: flexión, recolección y trabajo de anca',
+      'Longitud con obstáculos variados — fluidez y confianza',
+    ],
+    plano:[
+      'Entrada en calor: paso 10 min + trote suave 5 min',
+      'Trote extendido por los largos — que abra el tranco',
+      'Palos en el piso al trote: series de 6 palos',
+      'Palos en el piso al galope: regular el galope entre palos',
+      'Galope corto parejo — mantener el ritmo en las curvas',
+      'Galope largo por el largo de pista — soltar y recoger',
+      'Transiciones galope largo ↔ galope corto en la pista',
+      'Trabajo sin estribos: 15 min trote y galope',
+      'Regulación: llegar en 5 o en 6 tiempos a una barra imaginaria',
+    ],
+    salto:[
+      'Recorrido de 8-10 obstáculos con variedad de alturas',
+      'Oxers y combinaciones (doble, triple)',
+      'Trabajo de distancias difíciles: largas y cortas',
+      'Regulación de galope: llegar en 5 o en 6 tiempos a la barra',
+      'Giros rápidos y cambios de mano entre obstáculos',
+      'Saltos desde ángulo — precisión de trayectoria',
+      'Trabajo sobre terreno: saltos en campo con cuestas',
+    ],
+    tierra_extra:[
+      'Análisis propio del trabajo — qué faltó, qué salió bien',
+      'Trabajo de campo largo para condición física',
+    ]
   },
   competicion:{
-    tierra:['Trabajo de in-hand según prueba','Refinamiento de collection'],
-    montado:['Ensayo de prueba completa','Trabajo de los movimientos difíciles','Transiciones perfectas','Presentación y entrada','Trabajo de pieza a pieza'],
-    tierra_extra:['Análisis de video','Trabajo mental: visualización']
+    tierra:[
+      'Preparación específica según la competencia',
+      'Revisión de movimientos del recorrido en mano',
+    ],
+    plano:[
+      'Calentamiento completo: paso + trote + galope 20 min',
+      'Palos en el piso al trote y al galope — soltar el caballo',
+      'Galope corto y largo alternados — regulación fina',
+      'Trabajo de regulación: llegar cómodo a la distancia',
+      'Trote extendido para soltar después del trabajo',
+    ],
+    salto:[
+      'Recorrido completo de competencia — tiempo y fluidez',
+      'Estrategia de recorrido: líneas directas vs seguras',
+      'Trabajo de los obstáculos complicados por separado',
+      'Calentamiento de competencia: rutina de 20 min',
+      'Barras sueltas post-competencia para soltar el caballo',
+    ],
+    tierra_extra:[
+      'Recuperación activa: paseo largo después de competir',
+      'Revisión física del caballo: remos, lomo, garganta',
+    ]
   }
 };
 
 const DISC_NOTES = {
-  doma:'Priorizar collection, impulsión y rectitud. Cada ejercicio preparar para el siguiente nivel.',
-  salto:'Incluir trabajo de poles en tierra, gymnastic lines y progressión de alturas.',
-  completo:'Alternar días de doma, campo y salto. Mantener condición física del caballo.',
-  endurance:'Enfocarse en ritmo, distancia y recuperación. Trabajo cardiovascular progresivo.',
-  western:'Énfasis en collection, paradas y trabajo lateral específico del western.',
-  recreativo:'Priorizar conexión, confianza y disfrute. Sin presión de competencia.'
+  salto:'Combiná siempre trabajo en plano + salto. El plano es la base del salto: un caballo equilibrado salta mejor. No saltés más de 3 veces por semana.',
+  plano:'Trabajá la regularidad de los aires, la flexibilidad y el equilibrio. El caballo tiene que ceder a las ayudas sin resistencia.',
+  completo:'Alternás doma, campo y salto en la semana. La condición física del caballo es clave — el trabajo de campo se hace progresivo.',
+  polo:'Priorizar velocidad de respuesta, paradas, giros y trabajo en espacios reducidos. El caballo de polo necesita gran agilidad.',
+  endurance:'La base es el trabajo cardiovascular progresivo. Largos trotes y galopes controlados, trabajo en terreno variado y monitoreo de recuperación.',
+  campo:'Trabajo en terreno variado, cuestas, barro, agua. Priorizar confianza del caballo y equilibrio del jinete en situaciones no controladas.',
+  recreativo:'Lo más importante es el vínculo y la confianza. Sin presión de tiempo ni de nivel. Disfrutar el proceso.'
 };
 
 function buildEqPlan(){
@@ -1916,6 +2120,8 @@ function buildEqPlan(){
     age: document.getElementById('eq-rider-age').value,
     fitness: document.getElementById('eq-rider-fitness').value,
     goal: document.getElementById('eq-goal').value,
+    jumpDays: parseInt(document.getElementById('eq-jump-days').value)||2,
+    jumpHeight: parseInt(document.getElementById('eq-jump-height').value)||0,
   };
   const horse = {
     level: document.getElementById('eq-horse-level').value,
@@ -1947,28 +2153,165 @@ function generateEqPlan(rider, horse){
   // Duration based on fitness and level
   const duration = horse.fitness==='baja'?30:horse.fitness==='media'?45:60;
 
-  const workDays = [];
+  // Discipline determines if we include jumping days
+  const hasJumping = ['salto','completo'].includes(rider.discipline);
+  const hasField = ['completo','campo','endurance'].includes(rider.discipline);
+
   const patterns = {
-    3:['tierra_montado','descanso','montado_trabajo','descanso','tierra_montado','descanso','descanso'],
-    4:['tierra_montado','montado_trabajo','descanso','tierra_montado','montado_trabajo','descanso','descanso'],
-    5:['tierra_montado','montado_trabajo','descanso','tierra_montado','montado_trabajo','paseo','descanso'],
-    6:['tierra_montado','montado_trabajo','tierra_extra','montado_trabajo','tierra_montado','paseo','descanso'],
+    3:['plano','descanso','salto_o_plano','descanso','plano','descanso','descanso'],
+    4:['plano','salto_o_plano','descanso','plano','salto_o_plano','descanso','descanso'],
+    5:['plano','salto_o_plano','descanso','plano','salto_o_plano','paseo','descanso'],
+    6:['plano','salto_o_plano','tierra_extra','plano','salto_o_plano','paseo','descanso'],
   };
   const pattern = patterns[days]||patterns[4];
 
   return {
     rider, horse, discNote, created: today(),
-    warning: horse.level==='verde'&&riderLvlMap[lvl]>1?'⚠️ Tu caballo está en un nivel inicial. El plan fue adaptado a su nivel para cuidar su bienestar.':'',
+    warning: horse.level==='verde'&&riderLvlMap[lvl]>1?'⚠️ Tu caballo está en nivel inicial. El plan fue adaptado a su nivel para cuidar su bienestar y su desarrollo.':'',
     days: DAY_NAMES.map((name,i)=>{
       const type = pattern[i];
       if(type==='descanso') return {day:name, type:'rest'};
-      if(type==='paseo') return {day:name, type:'paseo', duration:40, exercises:['Paseo relajado en campo o pista','Riendas largas, ritmo libre','Trabajo de confianza y descompresión']};
-      const tierra = pick(effExs.tierra||[], 3);
-      const montado = pick(effExs.montado||[], type==='montado_trabajo'?5:3);
+      if(type==='paseo') return {day:name, type:'paseo', duration:35,
+        exercises:['Paseo tranquilo en campo o pista — riendas largas','Trabajo al paso libre, que el caballo se estire y relaje','Sin exigencia — descompresión después del trabajo de la semana']};
+
+      const tierra = pick(effExs.tierra||[], 2);
+      const planoExs = pick(effExs.plano||[], 4);
+
+      // Jumping day or flat day
+      const isJumpDay = (type==='salto_o_plano') && hasJumping;
+      const saltoExs = isJumpDay ? pick(effExs.salto||[], 3) : [];
       const extra = type==='tierra_extra' ? (effExs.tierra_extra||[]) : [];
-      return {day:name, type, duration, tierra, montado, extra};
+      const arena = isJumpDay && rider.jumpHeight ? generateArenaLayout(rider.jumpHeight, rider.jumpDays, effectiveLvlName, i) : null;
+
+      const focusLabel = isJumpDay ? 'Plano + Salto' : 'Trabajo en Plano';
+      return {day:name, type, focusLabel, duration, tierra, plano:planoExs, salto:saltoExs, extra, arena};
     })
   };
+}
+
+// ─── ARENA LAYOUT GENERATOR ───────────────────────────────────────────────────
+function generateArenaLayout(jumpHeight, jumpDays, level, dayIndex){
+  // Heights for work: train at 80% of max, poles at floor
+  const h = parseInt(jumpHeight)||60;
+  const warmupH = Math.max(20, Math.round(h * 0.4));
+  const workH   = Math.max(40, Math.round(h * 0.75));
+  const maxH    = h;
+  const isAdvanced = h >= 100;
+  const isBeginner = h < 60;
+
+  // Different layouts per day index (variation)
+  const layouts = [layoutGimnasia, layoutLinea, layoutRecorrido, layoutCircuitos];
+  const fn = layouts[dayIndex % layouts.length];
+  return fn(warmupH, workH, maxH, isBeginner, isAdvanced);
+}
+
+// SVG helpers
+const W=380, H=280;
+function arenaBorder(){ return `<rect x="10" y="10" width="${W-20}" height="${H-20}" rx="8" fill="#e8dfc8" stroke="#b8a88a" stroke-width="2"/>`; }
+function pole(x,y,w,color='#C0392B',label=''){
+  return `<rect x="${x-w/2}" y="${y-5}" width="${w}" height="10" rx="3" fill="${color}" stroke="#fff" stroke-width="1"/>
+  ${label?`<text x="${x}" y="${y+20}" text-anchor="middle" font-size="10" fill="#555">${label}</text>`:''}`;
+}
+function standard(x,y){ return `<rect x="${x-4}" y="${y-18}" width="8" height="36" rx="2" fill="#8B4513"/>`; }
+function jumpEl(x,y,w,color,label){ return standard(x-w/2-4,y)+standard(x+w/2+4,y)+pole(x,y,w,color,label); }
+function arrow(x1,y1,x2,y2,color='#4A7A9B'){
+  const dx=x2-x1,dy=y2-y1,len=Math.sqrt(dx*dx+dy*dy);
+  const nx=dx/len,ny=dy/len;
+  const ax=x2-nx*14+ny*6,ay=y2-ny*14-nx*6;
+  const bx=x2-nx*14-ny*6,by=y2-ny*14+nx*6;
+  return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <polygon points="${x2},${y2} ${ax},${ay} ${bx},${by}" fill="${color}"/>`;
+}
+function label(x,y,txt,size=10,color='#333'){return `<text x="${x}" y="${y}" text-anchor="middle" font-size="${size}" fill="${color}" font-weight="500">${txt}</text>`;}
+
+function layoutGimnasia(wH, wkH, mH, isBeg, isAdv){
+  // Straight gymnastic line center of arena
+  const cx=W/2, y=H/2;
+  const gap = isBeg?70:isAdv?55:62;
+  const poles = isBeg?3:isAdv?5:4;
+  let svg=`<svg class="arena-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+    ${arenaBorder()}
+    ${label(cx,28,'GIMNASIA EN LÍNEA',11,'#8B4513')}`;
+  // approach arrow
+  svg += arrow(cx, H-30, cx, y+poles*gap/2+20);
+  // floor poles before
+  svg += pole(cx, y+poles*gap/2+15, 100, '#888', 'palo piso');
+  // gymnastic elements
+  for(let i=0;i<poles;i++){
+    const ey = y + (poles/2-i)*gap;
+    if(i===0) svg += jumpEl(cx, ey, 110, `#DAA520`, `${wH}cm`);
+    else if(i===poles-1) svg += jumpEl(cx, ey, 110, '#C0392B', `${mH}cm`);
+    else svg += jumpEl(cx, ey, 110, '#4A7C59', `${wkH}cm`);
+    if(i<poles-1) svg += label(cx+70, ey-gap/2, `${isBeg?'1 trote':'1 galopa'}`, 9, '#666');
+  }
+  // exit arrow
+  svg += arrow(cx, y-poles*gap/2-20, cx, 40);
+  svg += `</svg>`;
+  const note = `Gimnasia en línea recta — ${poles} elementos.\nEntrada: barra a ${wH}cm · Centro: ${wkH}cm · Salida: ${mH}cm\nSeparación entre vayas: ${isBeg?'1 trote':'1 galopa'}. Entrá siempre derecho, no corrijas en el aire.`;
+  return {svg, note};
+}
+
+function layoutLinea(wH, wkH, mH, isBeg, isAdv){
+  // Two jumps on diagonal + one on long side
+  const svg=`<svg class="arena-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+    ${arenaBorder()}
+    ${label(W/2,28,'LÍNEA DE DOS + VERTICAL',11,'#8B4513')}
+    ${arrow(60,H-30,60,H/2+20)}
+    ${jumpEl(60,H/2,100,'#DAA520',`${wH}cm`)}
+    ${label(90,H/2-30,'${isBeg?"4 trot":"3 gal"}',9,'#666')}
+    ${jumpEl(60,H/2-80,100,'#C0392B',`${mH}cm`)}
+    ${arrow(60,H/2-100,60,30)}
+    ${arrow(W-60,H-30,W-60,H/2)}
+    ${jumpEl(W-60,H/2,100,'#4A7C59',`${wkH}cm`)}
+    ${arrow(W-60,H/2-20,W-60,30)}
+    ${label(W/2,H-15,'Trabajá primero cada línea por separado, después combinadas',9,'#888')}
+  </svg>`;
+  const note = `Línea de dos obstáculos + vertical suelto.\nPrimer obstáculo: ${wH}cm · Segundo: ${mH}cm · Vertical suelto: ${wkH}cm\nDistancia entre los dos primeros: ${isBeg?'4 trotes':'3 galopes'}. Trabajá cada línea sola antes de combinar.`;
+  return {svg, note};
+}
+
+function layoutRecorrido(wH, wkH, mH, isBeg, isAdv){
+  const svg=`<svg class="arena-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+    ${arenaBorder()}
+    ${label(W/2,28,'MINI RECORRIDO — 5 OBSTÁCULOS',11,'#8B4513')}
+    ${label(50,55,'①',13,'#C0392B')}
+    ${jumpEl(80,70,90,'#C0392B',`${wH}cm`)}
+    ${arrow(130,70,W-140,90)}
+    ${label(W-60,100,'②',13,'#DAA520')}
+    ${jumpEl(W-80,110,90,'#DAA520',`${wkH}cm`)}
+    ${arrow(W-80,130,W-100,H-80)}
+    ${label(W-60,H-60,'③',13,'#4A7C59')}
+    ${jumpEl(W-90,H-70,90,'#4A7C59',`${mH}cm`)}
+    ${arrow(W-130,H-70,130,H-80)}
+    ${label(60,H-55,'④',13,'#9B59B6')}
+    ${jumpEl(90,H-65,90,'#9B59B6',`${wkH}cm`)}
+    ${arrow(90,H-85,W/2-20,H/2+10)}
+    ${label(W/2+10,H/2-10,'⑤',13,'#E67E22')}
+    ${jumpEl(W/2+20,H/2,90,'#E67E22',`${mH}cm`)}
+  </svg>`;
+  const note = `Mini recorrido de 5 obstáculos en pista.\n(1) ${wH}cm → (2) ${wkH}cm → (3) ${mH}cm → (4) ${wkH}cm → (5) ${mH}cm\nPrimero recorré en el aire con los ojos, después al paso. Empezá despacio, el objetivo es fluidez entre vallas.`;
+  return {svg, note};
+}
+
+function layoutCircuitos(wH, wkH, mH, isBeg, isAdv){
+  const svg=`<svg class="arena-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+    ${arenaBorder()}
+    ${label(W/2,28,'CIRCUITO — CURVAS Y RECTAS',11,'#8B4513')}
+    ${pole(W/2,H-40,110,'#888','palos piso')}
+    ${arrow(W/2,H-55,W/2,H/2+20)}
+    ${jumpEl(W/2,H/2+10,100,'#DAA520',`${wH}cm`)}
+    ${arrow(W/2-5,H/2-10,90,H/2-60,' ')}
+    ${jumpEl(80,H/2-70,100,'#4A7C59',`${wkH}cm`)}
+    ${arrow(80,H/2-90,80,60,' ')}
+    ${jumpEl(80,50,100,'#C0392B',`${mH}cm`)}
+    ${arrow(100,50,W-90,60,' ')}
+    ${jumpEl(W-80,50,100,'#9B59B6',`${wkH}cm`)}
+    ${arrow(W-80,70,W-80,H/2-30,' ')}
+    ${jumpEl(W-80,H/2-20,100,'#E67E22',`${mH}cm`)}
+    ${label(W/2,H-10,'Empezá por los palos, después incorporá las vayas de a una',9,'#888')}
+  </svg>`;
+  const note = `Circuito con curvas — trabajá el ritmo en todo el recorrido.\nEntrada: ${wH}cm · Laterales: ${wkH}cm · Finales: ${mH}cm\nEntrá siempre desde los palos en el piso. Mantené el mismo galope en las curvas que en las rectas.`;
+  return {svg, note};
 }
 
 function renderEquestrianPlan(){
@@ -1976,13 +2319,14 @@ function renderEquestrianPlan(){
   if(!el) return;
   if(!isPremium()){
     el.innerHTML=`<div class="premium-lock">
-      <div class="premium-icon">⭐</div>
+      <div class="premium-icon"><i data-lucide="sparkles" style="width:44px;height:44px"></i></div>
       <div class="premium-title">Plan Ecuestre Personalizado</div>
       <div class="premium-desc">Plan semanal de entrenamiento adaptado a tu nivel como jinete y al nivel de tu caballo. Ejercicios de tierra, montado y acondicionamiento, todo pensado para avanzar juntos.</div>
-      <div class="premium-price">$4.99 USD</div>
-      <div class="premium-period">pago único · incluye también el plan de gym</div>
-      <button class="btn btn-primary" onclick="openModal('modal-premium')">🔑 Tengo un código</button>
+      <div class="premium-price">$2.500 ARS</div>
+      <div class="premium-period">por mes · incluye gym + plan ecuestre</div>
+      <button class="btn btn-primary" onclick="openModal('modal-premium')"><i data-lucide="gem" style="width:14px;height:14px"></i> Desbloquear Premium</button>
     </div>`;
+    try{ lucide.createIcons(); }catch(e){}
     return;
   }
   const plan = S.get('eq_plan', null);
@@ -1997,12 +2341,12 @@ function renderEquestrianPlan(){
   }
 
   const levelLabels={principiante:'Principiante',iniciado:'Iniciado',intermedio:'Intermedio',avanzado:'Avanzado',competicion:'Competición'};
-  const discLabels={doma:'Doma clásica',salto:'Salto',completo:'Concurso completo',endurance:'Endurance',western:'Western',recreativo:'Recreativo'};
+  const discLabels={salto:'Salto',plano:'Trabajo en plano',completo:'CCE',polo:'Polo',endurance:'Endurance',campo:'Campo',recreativo:'Recreativo'};
   const horseLvlLabels={verde:'Verde',basico:'Básico',intermedio:'Intermedio',avanzado:'Avanzado'};
 
   let html=`<div class="card mb16">
     <div class="flex justify-between items-center mb12">
-      <div class="card-title" style="margin:0">⭐ Tu Plan Ecuestre</div>
+      <div class="card-title" style="margin:0"><i data-lucide="sparkles" style="width:16px;height:16px"></i> Tu Plan Ecuestre</div>
       <button class="btn btn-secondary btn-sm" onclick="eqQStep=1;eqQNav(0);openModal('modal-eq-q')">Actualizar</button>
     </div>
     <div class="flex gap8 mb12" style="flex-wrap:wrap">
@@ -2011,37 +2355,41 @@ function renderEquestrianPlan(){
       <span class="tag tag-green">Caballo: ${horseLvlLabels[plan.horse.level]||plan.horse.level}</span>
       <span class="tag tag-gold">${plan.horse.days} días/semana</span>
     </div>
+    ${plan.rider.jumpHeight?`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px"><span class="tag tag-red">Altura actual: ${plan.rider.jumpHeight}cm</span><span class="tag tag-blue">Salta ${plan.rider.jumpDays}x semana</span></div>`:''}
     ${plan.warning?`<div style="padding:10px;background:#FDF3D0;border-radius:8px;font-size:13px;margin-bottom:10px">${plan.warning}</div>`:''}
-    ${plan.discNote?`<div style="padding:10px;background:#F0F5FF;border-radius:8px;font-size:13px;color:var(--blue)">📌 ${plan.discNote}</div>`:''}
+    ${plan.discNote?`<div style="padding:10px;background:#F0F5FF;border-radius:8px;font-size:13px;color:var(--blue)"><i data-lucide="map-pin" style="width:13px;height:13px"></i> ${plan.discNote}</div>`:''}
   </div>`;
 
   html += plan.days.map((d,i)=>{
-    if(d.type==='rest') return `<div class="plan-day"><div class="plan-day-header"><div><div class="plan-day-title">${d.day}</div><div class="plan-day-sub">🌿 Descanso — potrero libre</div></div></div></div>`;
+    if(d.type==='rest') return `<div class="plan-day"><div class="plan-day-header"><div><div class="plan-day-title">${d.day}</div><div class="plan-day-sub"><i data-lucide="leaf" style="width:13px;height:13px"></i> Descanso — potrero libre</div></div></div></div>`;
     if(d.type==='paseo') return `<div class="plan-day">
       <div class="plan-day-header" onclick="togglePlanDay('eqpd${i}')">
-        <div><div class="plan-day-title">${d.day} — Paseo / Recuperación</div><div class="plan-day-sub">🌾 ${d.duration} min · baja intensidad</div></div><span>▾</span>
+        <div><div class="plan-day-title">${d.day} — Paseo / Recuperación</div><div class="plan-day-sub"><i data-lucide="wheat" style="width:13px;height:13px"></i> ${d.duration} min · baja intensidad</div></div><span><i data-lucide="chevron-down" style="width:14px;height:14px"></i></span>
       </div>
       <div class="plan-day-body" id="eqpd${i}">
-        ${d.exercises.map(e=>`<div class="plan-ex"><div class="plan-ex-icon">🌿</div><div class="plan-ex-name">${e}</div></div>`).join('')}
+        ${d.exercises.map(e=>`<div class="plan-ex"><div class="plan-ex-icon"><i data-lucide="leaf" style="width:13px;height:13px"></i></div><div class="plan-ex-name">${e}</div></div>`).join('')}
       </div></div>`;
 
     const hasTierra = d.tierra?.length>0;
-    const hasMontado = d.montado?.length>0;
-    const sub = [hasTierra?'tierra':'',hasMontado?'montado':''].filter(Boolean).join(' + ');
+    const hasPlano = d.plano?.length>0;
+    const hasSalto = d.salto?.length>0;
     return `<div class="plan-day">
       <div class="plan-day-header" onclick="togglePlanDay('eqpd${i}')">
-        <div><div class="plan-day-title">${d.day}</div><div class="plan-day-sub">🐴 ${sub} · ${d.duration} min</div></div><span>▾</span>
+        <div><div class="plan-day-title">${d.day} — ${d.focusLabel||'Entrenamiento'}</div><div class="plan-day-sub">🐴 ${d.duration} min${hasSalto?' · incluye salto':''}</div></div><span><i data-lucide="chevron-down" style="width:14px;height:14px"></i></span>
       </div>
       <div class="plan-day-body" id="eqpd${i}">
-        ${hasTierra?`<div class="plan-section-title">🦮 Trabajo de tierra / mano</div>${d.tierra.map(e=>`<div class="plan-ex"><div class="plan-ex-icon">🟤</div><div class="plan-ex-name">${e}</div></div>`).join('')}`:''}
-        ${hasMontado?`<div class="plan-section-title">🏇 Trabajo montado</div>${d.montado.map(e=>`<div class="plan-ex"><div class="plan-ex-icon">⭐</div><div class="plan-ex-name">${e}</div></div>`).join('')}`:''}
-        ${d.extra?.length?`<div class="plan-section-title">➕ Trabajo extra</div>${d.extra.map(e=>`<div class="plan-ex"><div class="plan-ex-icon">📌</div><div class="plan-ex-name">${e}</div></div>`).join('')}`:''}
-        <div class="plan-rest">💡 Terminar siempre con unos minutos de paso largo para enfriar</div>
+        ${hasTierra?`<div class="plan-section-title">Trabajo de cuerda / mano</div>${d.tierra.map(e=>`<div class="plan-ex"><div class="plan-ex-icon"><i data-lucide="circle" style="width:13px;height:13px;color:#8B4513"></i></div><div class="plan-ex-name">${e}</div></div>`).join('')}`:''}
+        ${hasPlano?`<div class="plan-section-title">🏇 Trabajo en plano</div>${d.plano.map(e=>`<div class="plan-ex"><div class="plan-ex-icon"><i data-lucide="star" style="width:13px;height:13px"></i></div><div class="plan-ex-name">${e}</div></div>`).join('')}`:''}
+        ${hasSalto?`<div class="plan-section-title">Trabajo de salto</div>${d.salto.map(e=>`<div class="plan-ex"><div class="plan-ex-icon"><i data-lucide="circle" style="width:13px;height:13px;color:#C0392B"></i></div><div class="plan-ex-name">${e}</div></div>`).join('')}
+        ${d.arena?`<div class="arena-wrap"><div class="arena-title"><i data-lucide="map-pin" style="width:13px;height:13px"></i> Layout de pista sugerido</div>${d.arena.svg}<div class="arena-note">${d.arena.note.replace(/\n/g,'<br>')}</div></div>`:''}`:''}
+        ${d.extra?.length?`<div class="plan-section-title"><i data-lucide="plus" style="width:13px;height:13px"></i> Extra</div>${d.extra.map(e=>`<div class="plan-ex"><div class="plan-ex-icon"><i data-lucide="map-pin" style="width:13px;height:13px"></i></div><div class="plan-ex-name">${e}</div></div>`).join('')}`:''}
+        <div class="plan-rest"><i data-lucide="lightbulb" style="width:13px;height:13px"></i> Siempre terminar con paso largo con riendas largas para que el caballo se suelte</div>
       </div>
     </div>`;
   }).join('');
 
   el.innerHTML = html;
+  try{ lucide.createIcons(); }catch(e){}
 }
 
 function renderAll(){
@@ -2056,6 +2404,7 @@ function renderAll(){
   renderDiet();
   renderMotivacion();
   renderInicio();
+  try{ lucide.createIcons(); }catch(e){}
 }
 
 // Pre-fill calendar date default
