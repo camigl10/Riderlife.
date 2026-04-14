@@ -1,0 +1,2076 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RiderLife</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F9F6F1;--surface:#fff;--surface2:#F2EDE5;--border:#E8DFD2;
+  --text:#2C1810;--text2:#6B5344;--text3:#9E8272;
+  --primary:#8B4513;--primary2:#A0522D;
+  --accent:#DAA520;--green:#4A7C59;--blue:#4A7A9B;--red:#C0392B;
+  --shadow:0 2px 8px rgba(44,24,16,.08);--r:12px;--rs:8px;
+}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* NAV */
+.nav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.nav-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;padding:0 16px}
+.nav-logo{font-size:17px;font-weight:800;color:var(--primary);padding:14px 16px 14px 0;white-space:nowrap;letter-spacing:-.3px}
+.nav-tabs{display:flex;flex:1;overflow-x:auto;scrollbar-width:none}
+.nav-tabs::-webkit-scrollbar{display:none}
+.tab-btn{background:none;border:none;padding:14px 13px;font-size:13.5px;font-weight:500;color:var(--text3);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:.2s;font-family:inherit}
+.tab-btn:hover{color:var(--primary)}
+.tab-btn.active{color:var(--primary);border-bottom-color:var(--primary)}
+
+/* LAYOUT */
+.main{max-width:960px;margin:0 auto;padding:24px 16px}
+.section{display:none}.section.active{display:block}
+
+/* CARDS */
+.card{background:var(--surface);border-radius:var(--r);border:1px solid var(--border);padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.card-title{font-size:15px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:600px){.grid4,.grid3{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}}
+
+/* STAT CARDS */
+.stat{background:var(--surface);border-radius:var(--r);border:1px solid var(--border);padding:16px;text-align:center;box-shadow:var(--shadow)}
+.stat-icon{font-size:26px;margin-bottom:6px}
+.stat-val{font-size:22px;font-weight:700}
+.stat-lbl{font-size:11px;color:var(--text3);margin-top:3px}
+
+/* QUOTE */
+.quote{background:linear-gradient(135deg,#7a3b10,#A0522D);color:#fff;border-radius:var(--r);padding:22px 24px;margin-bottom:16px;position:relative;overflow:hidden}
+.quote::before{content:'"';position:absolute;top:-12px;left:14px;font-size:80px;opacity:.15;font-family:Georgia,serif;line-height:1}
+.quote-text{font-size:15px;line-height:1.65;font-style:italic;margin-bottom:10px;position:relative}
+.quote-author{font-size:12px;opacity:.75}
+
+/* CHECKLIST */
+.chk{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.chk:last-child{border-bottom:none}
+.chk input[type=checkbox]{width:17px;height:17px;cursor:pointer;accent-color:var(--primary);flex-shrink:0}
+.chk label{flex:1;cursor:pointer;font-size:14px}
+.chk.done label{text-decoration:line-through;color:var(--text3)}
+.chk-time{font-size:11px;color:var(--text3);background:var(--surface2);padding:2px 7px;border-radius:4px;white-space:nowrap}
+.chk-del{background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px 5px;border-radius:4px;opacity:0}
+.chk:hover .chk-del{opacity:1}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:var(--rs);border:none;font-size:13.5px;font-weight:500;cursor:pointer;transition:.2s;font-family:inherit}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary2)}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border)}.btn-secondary:hover{background:var(--border)}
+.btn-sm{padding:6px 12px;font-size:12.5px}
+.btn-icon{background:none;border:none;cursor:pointer;color:var(--text3);font-size:15px;padding:4px 6px;border-radius:6px;transition:.2s}
+.btn-icon:hover{background:var(--surface2);color:var(--text)}
+
+/* INPUTS */
+.inp{width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:var(--rs);font-size:13.5px;font-family:inherit;background:var(--surface);color:var(--text);transition:.2s}
+.inp:focus{outline:none;border-color:var(--primary)}
+.igrp{margin-bottom:12px}
+.ilbl{font-size:12.5px;font-weight:500;color:var(--text2);margin-bottom:5px;display:block}
+select.inp{cursor:pointer}
+textarea.inp{resize:vertical;min-height:70px}
+
+/* TAGS */
+.tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11.5px;font-weight:500}
+.tag-brown{background:#F5E6D3;color:var(--primary)}
+.tag-green{background:#DCF0E5;color:var(--green)}
+.tag-blue{background:#DCE9F5;color:var(--blue)}
+.tag-gold{background:#FDF3D0;color:#9a6d00}
+.tag-red{background:#FDECEA;color:var(--red)}
+
+/* PROGRESS */
+.progress{background:var(--surface2);border-radius:20px;height:7px;overflow:hidden}
+.progress-fill{height:100%;border-radius:20px;transition:width .4s ease}
+.prog-green{background:var(--green)}.prog-primary{background:var(--primary)}.prog-blue{background:var(--blue)}.prog-gold{background:var(--accent)}
+
+/* WATER */
+.water-grid{display:flex;gap:7px;flex-wrap:wrap}
+.wglass{width:34px;height:34px;border:2px solid #c5d8e8;border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;background:#fff;transition:.2s}
+.wglass.full{background:#DCE9F5;border-color:var(--blue)}
+
+/* SUB TABS */
+.stabs{display:flex;gap:3px;background:var(--surface2);padding:3px;border-radius:var(--rs);margin-bottom:16px}
+.stab{flex:1;text-align:center;padding:7px;border-radius:6px;border:none;background:none;font-size:12.5px;font-weight:500;color:var(--text3);cursor:pointer;transition:.2s;font-family:inherit}
+.stab.active{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.subcontent{display:none}.subcontent.active{display:block}
+
+/* SECTION HEADER */
+.sh{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px}
+.sh-title{font-size:21px;font-weight:700}
+.sh-sub{font-size:13px;color:var(--text3);margin-top:2px}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
+.overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:var(--r);padding:22px;width:100%;max-width:460px;max-height:88vh;overflow-y:auto}
+.mhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.mtitle{font-size:17px;font-weight:600}
+.mclose{background:none;border:none;font-size:20px;cursor:pointer;color:var(--text3);padding:2px 6px}
+.mfooter{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+
+/* HORSE PROFILE */
+.horse-card{background:linear-gradient(135deg,#F5E6D3,#F9F0E8);border-radius:var(--r);padding:18px;margin-bottom:16px;display:flex;align-items:center;gap:16px;border:1px solid #e8d4bc}
+.horse-av{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#8B4513,#A0522D);display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0}
+.horse-name{font-size:19px;font-weight:700}
+.horse-meta{font-size:12.5px;color:var(--text3);margin-top:2px}
+
+/* SESSION / LOG ITEMS */
+.log-item{background:var(--surface2);border-radius:var(--rs);padding:13px;margin-bottom:9px}
+.log-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px}
+.log-title{font-size:13.5px;font-weight:600}
+.log-date{font-size:11.5px;color:var(--text3)}
+.log-notes{font-size:12.5px;color:var(--text2);margin-top:4px}
+.log-del{background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:2px 5px;opacity:.6}
+.log-del:hover{opacity:1;color:var(--red)}
+
+/* EXERCISE ROW */
+.ex-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.ex-row:last-child{border-bottom:none}
+.ex-name{flex:1;font-size:13.5px;font-weight:500}
+.mini-inp{width:46px;padding:4px 5px;border:1px solid var(--border);border-radius:4px;font-size:12.5px;text-align:center;font-family:inherit;background:var(--surface)}
+.mini-inp:focus{outline:none;border-color:var(--primary)}
+.ex-unit{font-size:11px;color:var(--text3)}
+
+/* MEAL */
+.meal-slot{border:1px dashed var(--border);border-radius:var(--rs);padding:12px;margin-bottom:10px}
+.meal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.meal-title{font-size:13px;font-weight:600;color:var(--text2)}
+.meal-item{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13.5px;border-bottom:1px solid var(--border)}
+.meal-item:last-child{border-bottom:none}
+.meal-cals{font-size:11.5px;color:var(--text3);margin-left:auto;white-space:nowrap}
+
+/* GOAL */
+.goal-item{padding:12px 0;border-bottom:1px solid var(--border)}
+.goal-item:last-child{border-bottom:none}
+.goal-hdr{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.goal-icon{font-size:18px;flex-shrink:0}
+.goal-body{flex:1}
+.goal-title{font-size:13.5px;font-weight:500}
+.goal-meta{font-size:11.5px;color:var(--text3);margin-top:2px}
+.goal-item.done .goal-title{text-decoration:line-through;color:var(--text3)}
+
+/* HABIT TRACKER */
+.habit-labels{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px}
+.habit-label{font-size:9.5px;color:var(--text3);text-align:center}
+.habit-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.hday{aspect-ratio:1;border-radius:3px;background:var(--surface2);cursor:pointer;transition:.15s;border:none}
+.hday:hover{opacity:.8}
+.hday.done{background:var(--green)}
+.hday.today{outline:2px solid var(--primary);outline-offset:1px}
+
+/* STREAK */
+.streak{display:flex;align-items:center;gap:10px;padding:14px 18px;background:linear-gradient(135deg,#e85d04,#f48c06);border-radius:var(--r);color:#fff;margin-bottom:16px}
+.streak-num{font-size:30px;font-weight:800;line-height:1}
+.streak-txt{font-size:13px;opacity:.9}
+.streak-lbl{font-size:11px;opacity:.7;margin-top:1px}
+
+/* ACHIEVEMENT */
+.ach{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.ach:last-child{border-bottom:none}
+.ach-icon{font-size:24px;flex-shrink:0}
+.ach-title{font-size:13.5px;font-weight:600}
+.ach-desc{font-size:12px;color:var(--text3);margin-top:1px}
+.ach.locked{opacity:.35;filter:grayscale(1)}
+
+/* GREETING */
+.greeting{font-size:24px;font-weight:700;margin-bottom:3px}
+.greeting-sub{font-size:14px;color:var(--text2);margin-bottom:22px}
+
+/* UTILS */
+.flex{display:flex}.items-center{align-items:center}.justify-between{justify-content:space-between}
+.gap8{gap:8px}.gap12{gap:12px}.flex1{flex:1}.mb8{margin-bottom:8px}.mb12{margin-bottom:12px}.mb16{margin-bottom:16px}
+.text-sm{font-size:13px}.text-muted{color:var(--text3)}
+.empty{text-align:center;padding:28px 16px;color:var(--text3)}
+.empty-icon{font-size:36px;margin-bottom:10px}
+.empty-txt{font-size:13px}
+.hr{border:none;border-top:1px solid var(--border);margin:14px 0}
+
+/* CALENDAR */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cal-month{font-size:15px;font-weight:600}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-label{font-size:10px;color:var(--text3);text-align:center;padding:4px 0;font-weight:500}
+.cal-day{min-height:38px;border-radius:6px;padding:4px;cursor:pointer;transition:.15s;background:var(--surface2);display:flex;flex-direction:column;align-items:center}
+.cal-day:hover{background:var(--border)}
+.cal-day.today{background:#F5E6D3;outline:2px solid var(--primary)}
+.cal-day.other-month{opacity:.3}
+.cal-day-num{font-size:12px;font-weight:500;margin-bottom:2px}
+.cal-dot{width:6px;height:6px;border-radius:50%;margin:1px}
+.cal-dot-vet{background:#4A7A9B}.cal-dot-herrador{background:#8B4513}.cal-dot-vacuna{background:#4A7C59}.cal-dot-despar{background:#DAA520}.cal-dot-dent{background:#C0392B}.cal-dot-comp{background:#9B59B6}.cal-dot-otro{background:#888}
+.cal-upcoming{margin-top:16px}
+.cal-event{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.cal-event:last-child{border-bottom:none}
+.cal-event-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.cal-event-info{flex:1}
+.cal-event-title{font-size:13.5px;font-weight:500}
+.cal-event-date{font-size:11.5px;color:var(--text3)}
+.cal-event-soon{font-size:11px;font-weight:600;padding:2px 7px;border-radius:10px;background:#FDF3D0;color:#9a6d00}
+
+/* PREMIUM */
+.premium-lock{text-align:center;padding:40px 20px}
+.premium-icon{font-size:48px;margin-bottom:12px}
+.premium-title{font-size:20px;font-weight:700;margin-bottom:8px}
+.premium-desc{font-size:14px;color:var(--text3);margin-bottom:24px;line-height:1.6}
+.premium-price{font-size:28px;font-weight:800;color:var(--primary);margin-bottom:4px}
+.premium-period{font-size:13px;color:var(--text3);margin-bottom:24px}
+.premium-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#DAA520,#f0c040);color:#fff;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:700}
+
+/* QUESTIONNAIRE */
+.q-step{display:none}.q-step.active{display:block}
+.q-title{font-size:17px;font-weight:700;margin-bottom:6px}
+.q-sub{font-size:13px;color:var(--text3);margin-bottom:20px}
+.q-progress{display:flex;gap:4px;margin-bottom:20px}
+.q-dot{flex:1;height:4px;border-radius:2px;background:var(--border)}
+.q-dot.done{background:var(--primary)}
+.q-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.q-option{border:2px solid var(--border);border-radius:var(--rs);padding:12px;cursor:pointer;text-align:center;font-size:13px;font-weight:500;transition:.2s;background:var(--surface)}
+.q-option:hover{border-color:var(--primary);background:#FFF5EE}
+.q-option.selected{border-color:var(--primary);background:#FFF5EE;color:var(--primary)}
+.q-option-icon{font-size:22px;margin-bottom:4px}
+
+/* PLAN DISPLAY */
+.plan-day{border-radius:var(--rs);border:1px solid var(--border);margin-bottom:10px;overflow:hidden}
+.plan-day-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface2);cursor:pointer}
+.plan-day-title{font-size:13.5px;font-weight:600}
+.plan-day-sub{font-size:12px;color:var(--text3)}
+.plan-day-body{padding:14px;display:none}
+.plan-day-body.open{display:block}
+.plan-section-title{font-size:11.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin:12px 0 6px}
+.plan-section-title:first-child{margin-top:0}
+.plan-ex{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13.5px}
+.plan-ex:last-child{border-bottom:none}
+.plan-ex-icon{font-size:16px;flex-shrink:0}
+.plan-ex-name{flex:1}
+.plan-ex-detail{font-size:12px;color:var(--text3);text-align:right}
+.plan-rest{color:var(--text3);font-style:italic;font-size:13px;padding:6px 0}
+
+/* LOGIN */
+.login-screen{position:fixed;inset:0;background:linear-gradient(135deg,#2a0d05,#6b2d0f,#8B4513);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-box{background:#fff;border-radius:20px;padding:36px 32px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.login-logo{text-align:center;font-size:48px;margin-bottom:8px}
+.login-title{text-align:center;font-size:22px;font-weight:800;color:var(--primary);margin-bottom:4px}
+.login-sub{text-align:center;font-size:13px;color:var(--text3);margin-bottom:28px}
+.login-tabs{display:flex;background:var(--surface2);border-radius:var(--rs);padding:3px;margin-bottom:20px}
+.login-tab{flex:1;text-align:center;padding:8px;border-radius:6px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text3);cursor:pointer;font-family:inherit;transition:.2s}
+.login-tab.active{background:#fff;color:var(--primary);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.login-error{background:#FDECEA;color:var(--red);border-radius:var(--rs);padding:10px 12px;font-size:13px;margin-bottom:12px;display:none}
+.login-error.show{display:block}
+.user-badge{display:flex;align-items:center;gap:8px;padding:6px 12px;background:var(--surface2);border-radius:20px;font-size:13px;font-weight:500;margin-left:auto}
+.user-badge-name{max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn-logout{background:none;border:none;font-size:12px;color:var(--text3);cursor:pointer;padding:2px 4px;font-family:inherit}
+.btn-logout:hover{color:var(--red)}
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN SCREEN ===== -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">🐴</div>
+    <div class="login-title">RiderLife</div>
+    <div class="login-sub">Tu rutina ecuestre, gym y dieta</div>
+    <div class="login-tabs">
+      <button class="login-tab active" id="ltab-login" onclick="switchLoginTab('login')">Iniciar sesión</button>
+      <button class="login-tab" id="ltab-register" onclick="switchLoginTab('register')">Crear cuenta</button>
+    </div>
+    <div class="login-error" id="login-error"></div>
+    <div class="igrp">
+      <label class="ilbl">Usuario</label>
+      <input class="inp" id="auth-user" placeholder="Tu nombre de usuario" autocomplete="username">
+    </div>
+    <div class="igrp">
+      <label class="ilbl">Contraseña</label>
+      <input class="inp" id="auth-pass" type="password" placeholder="Tu contraseña" autocomplete="current-password">
+    </div>
+    <div class="igrp" id="auth-pass2-wrap" style="display:none">
+      <label class="ilbl">Confirmar contraseña</label>
+      <input class="inp" id="auth-pass2" type="password" placeholder="Repetí la contraseña">
+    </div>
+    <button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-top:4px" id="auth-submit-btn" onclick="submitAuth()">Entrar</button>
+    <div style="text-align:center;margin-top:16px;font-size:12px;color:var(--text3)">Tus datos se guardan solo en este dispositivo</div>
+  </div>
+</div>
+
+<nav class="nav" id="main-nav" style="display:none">
+  <div class="nav-inner">
+    <div class="nav-logo">🐴 RiderLife</div>
+    <div class="nav-tabs">
+      <button class="tab-btn active" data-tab="inicio">Inicio</button>
+      <button class="tab-btn" data-tab="caballo">Mi Caballo</button>
+      <button class="tab-btn" data-tab="gimnasio">Gimnasio</button>
+      <button class="tab-btn" data-tab="dieta">Dieta</button>
+      <button class="tab-btn" data-tab="motivacion">Motivación</button>
+    </div>
+    <div class="user-badge">
+      <span>👤</span>
+      <span class="user-badge-name" id="nav-username"></span>
+      <button class="btn-logout" onclick="logout()" title="Cerrar sesión">Salir</button>
+    </div>
+  </div>
+</nav>
+
+<main class="main" id="main-content" style="display:none">
+
+<!-- ===== INICIO ===== -->
+<section id="tab-inicio" class="section active">
+  <div class="greeting" id="greeting">¡Buen día!</div>
+  <div class="greeting-sub" id="greeting-sub"></div>
+
+  <div id="quote-box" class="quote"></div>
+
+  <div class="grid4 mb16" id="stats-grid"></div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">🐴 Tareas del caballo hoy</div>
+      <div id="inicio-horse-tasks"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">💧 Agua hoy</div>
+      <div id="inicio-water"></div>
+      <div class="hr"></div>
+      <div class="card-title" style="margin-top:4px">🏋️ Gimnasio hoy</div>
+      <div id="inicio-gym"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CABALLO ===== -->
+<section id="tab-caballo" class="section">
+  <div class="sh">
+    <div>
+      <div class="sh-title">🐴 Mi Caballo</div>
+      <div class="sh-sub" id="horse-subtitle">Cuidado y entrenamiento</div>
+    </div>
+    <button class="btn btn-secondary btn-sm" onclick="openModal('modal-horse-profile')">✏️ Perfil</button>
+  </div>
+
+  <div id="horse-profile-display"></div>
+
+  <div class="stabs">
+    <button class="stab active" data-stab="cuidado" data-group="caballo">Cuidado diario</button>
+    <button class="stab" data-stab="entrenamiento" data-group="caballo">Entrenamiento</button>
+    <button class="stab" data-stab="salud" data-group="caballo">Salud</button>
+    <button class="stab" data-stab="calendario" data-group="caballo">📅 Calendario</button>
+    <button class="stab" data-stab="plan-ecuestre" data-group="caballo">⭐ Plan</button>
+  </div>
+
+  <div id="stab-cuidado" class="subcontent active">
+    <div class="card">
+      <div class="flex justify-between items-center mb12">
+        <div class="card-title" style="margin:0">Tareas de hoy</div>
+        <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-task')">+ Tarea</button>
+      </div>
+      <div id="horse-tasks-list"></div>
+    </div>
+  </div>
+
+  <div id="stab-entrenamiento" class="subcontent">
+    <div class="flex justify-between items-center mb16">
+      <div></div>
+      <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-training')">+ Sesión</button>
+    </div>
+    <div id="training-list"></div>
+  </div>
+
+  <div id="stab-salud" class="subcontent">
+    <div class="flex justify-between items-center mb16">
+      <div></div>
+      <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-health')">+ Registro</button>
+    </div>
+    <div id="health-list"></div>
+  </div>
+
+  <div id="stab-calendario" class="subcontent">
+    <div class="card">
+      <div class="cal-nav">
+        <button class="btn-icon" onclick="calNav(-1)">◀</button>
+        <div class="cal-month" id="cal-month-label"></div>
+        <button class="btn-icon" onclick="calNav(1)">▶</button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="cal-upcoming">
+        <div class="card-title" style="margin-top:14px">Próximos eventos</div>
+        <div id="cal-upcoming-list"></div>
+      </div>
+    </div>
+    <div style="text-align:right"><button class="btn btn-primary btn-sm" onclick="openModal('modal-cal-event')">+ Evento</button></div>
+  </div>
+
+  <div id="stab-plan-ecuestre" class="subcontent">
+    <div id="eq-plan-content"></div>
+  </div>
+</section>
+
+<!-- ===== GIMNASIO ===== -->
+<section id="tab-gimnasio" class="section">
+  <div class="sh">
+    <div><div class="sh-title">🏋️ Gimnasio</div><div class="sh-sub">Entrena fuerte, monta mejor</div></div>
+    <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-workout')">+ Sesión</button>
+  </div>
+
+  <div class="stabs">
+    <button class="stab active" data-stab="gym-hoy" data-group="gym">Hoy</button>
+    <button class="stab" data-stab="gym-rutinas" data-group="gym">Rutinas</button>
+    <button class="stab" data-stab="gym-personal" data-group="gym">💎 Personal</button>
+    <button class="stab" data-stab="gym-historial" data-group="gym">Historial</button>
+  </div>
+
+  <div id="stab-gym-hoy" class="subcontent active">
+    <div id="gym-today-content"></div>
+  </div>
+
+  <div id="stab-gym-rutinas" class="subcontent">
+    <div id="gym-routines-content"></div>
+  </div>
+
+  <div id="stab-gym-personal" class="subcontent">
+    <div id="gym-personal-content"></div>
+  </div>
+
+  <div id="stab-gym-historial" class="subcontent">
+    <div id="gym-history-content"></div>
+  </div>
+</section>
+
+<!-- ===== DIETA ===== -->
+<section id="tab-dieta" class="section">
+  <div class="sh">
+    <div><div class="sh-title">🥗 Dieta</div><div class="sh-sub">Combustible para rendir</div></div>
+  </div>
+
+  <div class="stabs">
+    <button class="stab active" data-stab="diet-hoy" data-group="diet">Hoy</button>
+    <button class="stab" data-stab="diet-historial" data-group="diet">Historial</button>
+  </div>
+
+  <div id="stab-diet-hoy" class="subcontent active">
+    <div id="diet-today-content"></div>
+  </div>
+
+  <div id="stab-diet-historial" class="subcontent">
+    <div id="diet-history-content"></div>
+  </div>
+</section>
+
+<!-- ===== MOTIVACION ===== -->
+<section id="tab-motivacion" class="section">
+  <div class="sh">
+    <div><div class="sh-title">🌟 Motivación</div><div class="sh-sub">Tus metas, tus logros</div></div>
+  </div>
+
+  <div class="stabs">
+    <button class="stab active" data-stab="mot-objetivos" data-group="mot">Objetivos</button>
+    <button class="stab" data-stab="mot-habitos" data-group="mot">Hábitos</button>
+    <button class="stab" data-stab="mot-logros" data-group="mot">Logros</button>
+  </div>
+
+  <div id="stab-mot-objetivos" class="subcontent active">
+    <div class="flex justify-between items-center mb16">
+      <div></div>
+      <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-goal')">+ Objetivo</button>
+    </div>
+    <div id="goals-list"></div>
+  </div>
+
+  <div id="stab-mot-habitos" class="subcontent">
+    <div id="habits-content"></div>
+  </div>
+
+  <div id="stab-mot-logros" class="subcontent">
+    <div id="achievements-content"></div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===== MODALS ===== -->
+
+<!-- Horse Profile -->
+<div class="overlay" id="modal-horse-profile">
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle">Perfil del caballo</div><button class="mclose" onclick="closeModal('modal-horse-profile')">✕</button></div>
+    <div class="igrp"><label class="ilbl">Nombre</label><input class="inp" id="hp-name" placeholder="Nombre de tu caballo"></div>
+    <div class="igrp"><label class="ilbl">Raza</label><input class="inp" id="hp-breed" placeholder="Ej: Warmblood, PRE, KWPN..."></div>
+    <div class="grid2">
+      <div class="igrp"><label class="ilbl">Edad</label><input class="inp" id="hp-age" type="number" placeholder="Años"></div>
+      <div class="igrp"><label class="ilbl">Color / Capa</label><input class="inp" id="hp-color" placeholder="Ej: Alazán, Tordo..."></div>
+    </div>
+    <div class="igrp"><label class="ilbl">Notas</label><textarea class="inp" id="hp-notes" placeholder="Info adicional..."></textarea></div>
+    <div class="mfooter"><button class="btn btn-secondary" onclick="closeModal('modal-horse-profile')">Cancelar</button><button class="btn btn-primary" onclick="saveHorseProfile()">Guardar</button></div>
+  </div>
+</div>
+
+<!-- Add Task -->
+<div class="overlay" id="modal-add-task">
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle">Nueva tarea</div><button class="mclose" onclick="closeModal('modal-add-task')">✕</button></div>
+    <div class="igrp"><label class="ilbl">Descripción</label><input class="inp" id="task-text" placeholder="Ej: Alimentar, Limpiar el box..."></div>
+    <div class="grid2">
+      <div class="igrp"><label class="ilbl">Hora</label><input class="inp" id="task-time" type="time"></div>
+      <div class="igrp"><label class="ilbl">Categoría</label>
+        <select class="inp" id="task-cat">
+          <option value="alimentacion">🌾 Alimentación</option>
+          <option value="limpieza">🧹 Limpieza</option>
+          <option value="ejercicio">🏇 Ejercicio</option>
+          <option value="salud">💊 Salud</option>
+          <option value="otro">📌 Otro</option>
+        </select>
+      </div>
+    </div>
+    <div class="mfooter"><button class="btn btn-secondary" onclick="closeModal('modal-add-task')">Cancelar</button><button class="btn btn-primary" onclick="addTask()">Agregar</button></div>
+  </div>
+</div>
+
+<!-- Add Training -->
+<div class="overlay" id="modal-add-training">
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle">Sesión de entrenamiento</div><button class="mclose" onclick="closeModal('modal-add-training')">✕</button></div>
+    <div class="igrp"><label class="ilbl">Fecha</label><input class="inp" id="tr-date" type="date"></div>
+    <div class="grid2">
+      <div class="igrp"><label class="ilbl">Tipo</label>
+        <select class="inp" id="tr-type">
+          <option value="Doma">Doma</option>
+          <option value="Salto">Salto</option>
+          <option value="Paseo">Paseo / Hacking</option>
+          <option value="Trote">Trabajo en trote</option>
+          <option value="Galope">Trabajo en galope</option>
+          <option value="Longitud">Trabajo en longitud</option>
+          <option value="Libre">Tiempo libre</option>
+          <option value="Competencia">Competencia</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+      <div class="igrp"><label class="ilbl">Duración (min)</label><input class="inp" id="tr-duration" type="number" placeholder="60"></div>
+    </div>
+    <div class="igrp"><label class="ilbl">Valoración</label>
+      <select class="inp" id="tr-rating">
+        <option value="5">⭐⭐⭐⭐⭐ Excelente</option>
+        <option value="4">⭐⭐⭐⭐ Muy buena</option>
+        <option value="3" selected>⭐⭐⭐ Buena</option>
+        <option value="2">⭐⭐ Regular</option>
+        <option value="1">⭐ Difícil</option>
+      </select>
+    </div>
+    <div class="igrp"><label class="ilbl">Notas</label><textarea class="inp" id="tr-notes" placeholder="¿Cómo fue la sesión?"></textarea></div>
+    <div class="mfooter"><button class="btn btn-secondary" onclick="closeModal('modal-add-training')">Cancelar</button><button class="btn btn-primary" onclick="addTraining()">Guardar</button></div>
+  </div>
+</div>
+
+<!-- Add Health -->
+<div class="overlay" id="modal-add-health">
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle">Registro de salud</div><button class="mclose" onclick="closeModal('modal-add-health')">✕</button></div>
+    <div class="igrp"><label class="ilbl">Fecha</label><input class="inp" id="hl-date" type="date"></div>
+    <div class="igrp"><label class="ilbl">Tipo</label>
+      <select class="inp" id="hl-type">
+        <option value="Veterinario">🩺 Visita veterinaria</option>
+        <option value="Herrador">🔨 Herrador</option>
+        <option value="Vacuna">💉 Vacuna</option>
+        <option value="Desparasitacion">🧪 Desparasitación</option>
+        <option value="Lesion">🩹 Lesión / Tratamiento</option>
+        <option value="Dentista">🦷 Dentista equino</option>
+        <option value="Otro">📋 Otro</option>
+      </select>
+    </div>
+    <div class="igrp"><label class="ilbl">Notas</label><textarea class="inp" id="hl-notes" placeholder="Detalles..."></textarea></div>
+    <div class="mfooter"><button class="btn btn-secondary" onclick="closeModal('modal-add-health')">Cancelar</button><button class="btn btn-primary" onclick="addHealth()">Guardar</button></div>
+  </div>
+</div>
+
+<!-- Add Workout -->
+<div class="overlay" id="modal-add-workout">
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle">Registrar entrenamiento</div><button class="mclose" onclick="closeModal('modal-add-workout')">✕</button></div>
+    <div class="igrp"><label class="ilbl">Fecha</label><input class="inp" id="wo-date" type="date"></div>
+    <div class="grid2">
+      <div class="igrp"><label class="ilbl">Tipo</label>
+        <select class="inp" id="wo-type">
+          <option value="Fuerza">💪 Fuerza</option>
+          <option value="Cardio">🏃 Cardio</option>
+          <option value="Movilidad">🧘 Movilidad / Flexibilidad</option>
+          <option value="HIIT">⚡ HIIT</option>
+          <option value="Core">🎯 Core</option>
+          <option value="Ecuestre-específico">🐴 Específico ecuestre</option>
+          <option value="Otro">🏋️ Otro</option>
+        </select>
+      </div>
+      <div class="igrp"><label class="ilbl">Duración (min)</label><input class="inp" id="wo-duration" type="number" placeholder="45"></div>
+    </div>
+    <div class="igrp"><label class="ilbl">Ejercicios (uno por línea: nombre, series x reps)</label><textarea class="inp" id="wo-exercises" placeholder="Sentadillas 4x12&#10;Peso muerto 3x8&#10;Plancha 3x45s" style="min-height:90px"></textarea></div>
+    <div class="igrp"><label class="ilbl">Notas</label><textarea class="inp" id="wo-notes" placeholder="¿Cómo te sentiste?"></textarea></div>
+    <div class="mfooter"><button class="btn btn-secondary" onclick="closeModal('modal-add-workout')">Cancelar</button><button class="btn btn-primary" onclick="addWorkout()">Guardar</button></div>
+  </div>
+</div>
+
+<!-- Add Meal Item -->
+<div class="overlay" id="modal-add-meal">
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle">Agregar alimento</div><button class="mclose" onclick="closeModal('modal-add-meal')">✕</button></div>
+    <div class="igrp"><label class="ilbl">Comida</label>
+      <select class="inp" id="meal-slot-select">
+        <option value="Desayuno">🌅 Desayuno</option>
+        <option value="Almuerzo">☀️ Almuerzo</option>
+        <option value="Merienda">🍎 Merienda</option>
+        <option value="Cena">🌙 Cena</option>
+      </select>
+    </div>
+    <div class="igrp"><label class="ilbl">Alimento</label><input class="inp" id="meal-food" placeholder="Ej: Avena con frutas, Pollo con arroz..."></div>
+    <div class="igrp"><label class="ilbl">Calorías (aprox.)</label><input class="inp" id="meal-cals" type="number" placeholder="350"></div>
+    <div class="mfooter"><button class="btn btn-secondary" onclick="closeModal('modal-add-meal')">Cancelar</button><button class="btn btn-primary" onclick="addMeal()">Agregar</button></div>
+  </div>
+</div>
+
+<!-- Add Goal -->
+<div class="overlay" id="modal-add-goal">
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle">Nuevo objetivo</div><button class="mclose" onclick="closeModal('modal-add-goal')">✕</button></div>
+    <div class="igrp"><label class="ilbl">Objetivo</label><input class="inp" id="goal-title" placeholder="¿Qué quieres lograr?"></div>
+    <div class="grid2">
+      <div class="igrp"><label class="ilbl">Categoría</label>
+        <select class="inp" id="goal-cat">
+          <option value="equitacion">🐴 Equitación</option>
+          <option value="gym">🏋️ Gimnasio</option>
+          <option value="dieta">🥗 Dieta</option>
+          <option value="personal">🌟 Personal</option>
+          <option value="competencia">🏆 Competencia</option>
+        </select>
+      </div>
+      <div class="igrp"><label class="ilbl">Fecha límite</label><input class="inp" id="goal-deadline" type="date"></div>
+    </div>
+    <div class="igrp"><label class="ilbl">Notas</label><textarea class="inp" id="goal-notes" placeholder="Detalla tu objetivo..."></textarea></div>
+    <div class="mfooter"><button class="btn btn-secondary" onclick="closeModal('modal-add-goal')">Cancelar</button><button class="btn btn-primary" onclick="addGoal()">Guardar</button></div>
+  </div>
+</div>
+
+<!-- Calendar Event Modal -->
+<div class="overlay" id="modal-cal-event">
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle">Nuevo evento</div><button class="mclose" onclick="closeModal('modal-cal-event')">✕</button></div>
+    <div class="igrp"><label class="ilbl">Tipo</label>
+      <select class="inp" id="cal-type">
+        <option value="herrador">🔨 Herrador</option>
+        <option value="vacuna">💉 Vacuna</option>
+        <option value="despar">🧪 Desparasitación</option>
+        <option value="vet">🩺 Veterinario</option>
+        <option value="dent">🦷 Dentista equino</option>
+        <option value="comp">🏆 Competencia</option>
+        <option value="otro">📌 Otro</option>
+      </select>
+    </div>
+    <div class="igrp"><label class="ilbl">Título / detalle</label><input class="inp" id="cal-title" placeholder="Ej: Herrado + herradura nueva"></div>
+    <div class="igrp"><label class="ilbl">Fecha</label><input class="inp" id="cal-date" type="date"></div>
+    <div class="igrp"><label class="ilbl">Notas</label><textarea class="inp" id="cal-notes" placeholder="Notas adicionales..."></textarea></div>
+    <div class="mfooter"><button class="btn btn-secondary" onclick="closeModal('modal-cal-event')">Cancelar</button><button class="btn btn-primary" onclick="addCalEvent()">Guardar</button></div>
+  </div>
+</div>
+
+<!-- Premium Activation Modal -->
+<div class="overlay" id="modal-premium">
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle">💎 Activar Premium</div><button class="mclose" onclick="closeModal('modal-premium')">✕</button></div>
+    <div style="text-align:center;padding:10px 0 20px">
+      <div style="font-size:40px;margin-bottom:8px">💎</div>
+      <div style="font-size:15px;font-weight:600;margin-bottom:6px">Plan Personal Premium</div>
+      <div style="font-size:13px;color:var(--text3);margin-bottom:20px">Ingresá tu código de activación para desbloquear el plan personalizado de gym y entrenamiento ecuestre</div>
+    </div>
+    <div class="igrp"><label class="ilbl">Código de activación</label><input class="inp" id="premium-code" placeholder="Ingresá tu código..." style="text-transform:uppercase"></div>
+    <div class="login-error" id="premium-error"></div>
+    <div class="mfooter"><button class="btn btn-secondary" onclick="closeModal('modal-premium')">Cancelar</button><button class="btn btn-primary" onclick="activatePremium()">Activar</button></div>
+  </div>
+</div>
+
+<!-- Gym Questionnaire Modal -->
+<div class="overlay" id="modal-gym-q">
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle">Tu perfil de entrenamiento</div><button class="mclose" onclick="closeModal('modal-gym-q')">✕</button></div>
+    <div class="q-progress" id="gym-q-progress"></div>
+
+    <div class="q-step active" id="gym-q-1">
+      <div class="q-title">Datos básicos</div>
+      <div class="q-sub">Para calcular tu plan ideal</div>
+      <div class="grid2">
+        <div class="igrp"><label class="ilbl">Género</label><select class="inp" id="gq-gender"><option value="f">Femenino</option><option value="m">Masculino</option></select></div>
+        <div class="igrp"><label class="ilbl">Edad</label><input class="inp" id="gq-age" type="number" placeholder="25"></div>
+      </div>
+      <div class="grid2">
+        <div class="igrp"><label class="ilbl">Peso (kg)</label><input class="inp" id="gq-weight" type="number" placeholder="65"></div>
+        <div class="igrp"><label class="ilbl">Altura (cm)</label><input class="inp" id="gq-height" type="number" placeholder="165"></div>
+      </div>
+    </div>
+
+    <div class="q-step" id="gym-q-2">
+      <div class="q-title">Nivel y objetivo</div>
+      <div class="q-sub">¿Cuánto entrenás actualmente?</div>
+      <div class="igrp"><label class="ilbl">Nivel actual</label>
+        <select class="inp" id="gq-level">
+          <option value="principiante">Principiante (nunca o hace mucho que no)</option>
+          <option value="intermedio">Intermedio (entreno a veces)</option>
+          <option value="avanzado">Avanzado (entreno regularmente)</option>
+        </select>
+      </div>
+      <div class="igrp"><label class="ilbl">Objetivo principal</label>
+        <select class="inp" id="gq-goal">
+          <option value="perder_grasa">Perder grasa</option>
+          <option value="ganar_musculo">Ganar músculo</option>
+          <option value="tonificar">Tonificar</option>
+          <option value="ecuestre">Mejorar rendimiento ecuestre</option>
+          <option value="flexibilidad">Mejorar flexibilidad</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="q-step" id="gym-q-3">
+      <div class="q-title">Equipamiento y tiempo</div>
+      <div class="q-sub">¿Con qué contás para entrenar?</div>
+      <div class="igrp"><label class="ilbl">Equipamiento disponible</label>
+        <select class="inp" id="gq-equipment">
+          <option value="none">Sin equipamiento (solo cuerpo)</option>
+          <option value="basic">Básico (mancuernas, bandas)</option>
+          <option value="full">Gimnasio completo</option>
+        </select>
+      </div>
+      <div class="grid2">
+        <div class="igrp"><label class="ilbl">Días por semana</label>
+          <select class="inp" id="gq-days">
+            <option value="2">2 días</option>
+            <option value="3" selected>3 días</option>
+            <option value="4">4 días</option>
+            <option value="5">5 días</option>
+          </select>
+        </div>
+        <div class="igrp"><label class="ilbl">Tiempo por sesión</label>
+          <select class="inp" id="gq-duration">
+            <option value="30">30 minutos</option>
+            <option value="45" selected>45 minutos</option>
+            <option value="60">60 minutos</option>
+            <option value="90">90 minutos</option>
+          </select>
+        </div>
+      </div>
+      <div class="igrp"><label class="ilbl">Lesiones o limitaciones</label>
+        <select class="inp" id="gq-injuries">
+          <option value="none">Ninguna</option>
+          <option value="rodilla">Rodilla</option>
+          <option value="espalda">Espalda baja</option>
+          <option value="hombro">Hombro</option>
+          <option value="cadera">Cadera</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="mfooter" id="gym-q-footer">
+      <button class="btn btn-secondary" id="gym-q-back" onclick="gymQNav(-1)" style="display:none">Atrás</button>
+      <button class="btn btn-primary" id="gym-q-next" onclick="gymQNav(1)">Siguiente →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Equestrian Questionnaire Modal -->
+<div class="overlay" id="modal-eq-q">
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle">⭐ Plan Ecuestre Personalizado</div><button class="mclose" onclick="closeModal('modal-eq-q')">✕</button></div>
+    <div class="q-progress" id="eq-q-progress"></div>
+
+    <div class="q-step active" id="eq-q-1">
+      <div class="q-title">Tu perfil como jinete</div>
+      <div class="q-sub">Contanos sobre tu experiencia</div>
+      <div class="igrp"><label class="ilbl">Nivel de equitación</label>
+        <select class="inp" id="eq-level">
+          <option value="principiante">Principiante (menos de 1 año)</option>
+          <option value="iniciado">Iniciado (1-2 años)</option>
+          <option value="intermedio">Intermedio (2-5 años)</option>
+          <option value="avanzado">Avanzado (5-10 años)</option>
+          <option value="competicion">Competición (10+ años)</option>
+        </select>
+      </div>
+      <div class="igrp"><label class="ilbl">Disciplina principal</label>
+        <select class="inp" id="eq-discipline">
+          <option value="doma">Doma clásica</option>
+          <option value="salto">Salto de obstáculos</option>
+          <option value="completo">Concurso completo</option>
+          <option value="endurance">Endurance</option>
+          <option value="western">Western</option>
+          <option value="recreativo">Recreativo / Paseo</option>
+        </select>
+      </div>
+      <div class="grid2">
+        <div class="igrp"><label class="ilbl">Tu edad</label><input class="inp" id="eq-rider-age" type="number" placeholder="25"></div>
+        <div class="igrp"><label class="ilbl">Condición física</label>
+          <select class="inp" id="eq-rider-fitness">
+            <option value="baja">Baja</option>
+            <option value="media" selected>Media</option>
+            <option value="alta">Alta</option>
+          </select>
+        </div>
+      </div>
+      <div class="igrp"><label class="ilbl">Objetivo</label>
+        <select class="inp" id="eq-goal">
+          <option value="asiento">Mejorar asiento y posición</option>
+          <option value="comunicacion">Mejorar comunicación con el caballo</option>
+          <option value="competencia">Prepararme para competencia</option>
+          <option value="tecnica">Mejorar técnica específica</option>
+          <option value="connection">Conexión y trabajo en collection</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="q-step" id="eq-q-2">
+      <div class="q-title">Tu caballo</div>
+      <div class="q-sub">Datos del equino para adaptar el plan</div>
+      <div class="igrp"><label class="ilbl">Nivel de entrenamiento del caballo</label>
+        <select class="inp" id="eq-horse-level">
+          <option value="verde">Sin entrenamiento / Verde</option>
+          <option value="basico">Básico (anda, para, gira)</option>
+          <option value="intermedio">Intermedio (galopa, trabaja en redondo)</option>
+          <option value="avanzado">Avanzado (trabaja colección, laterales)</option>
+        </select>
+      </div>
+      <div class="grid2">
+        <div class="igrp"><label class="ilbl">Edad del caballo</label><input class="inp" id="eq-horse-age" type="number" placeholder="7"></div>
+        <div class="igrp"><label class="ilbl">Condición física</label>
+          <select class="inp" id="eq-horse-fitness">
+            <option value="baja">Baja (recién empezando)</option>
+            <option value="media" selected>Media (trabajo regular)</option>
+            <option value="alta">Alta (bien condicionado)</option>
+          </select>
+        </div>
+      </div>
+      <div class="igrp"><label class="ilbl">Días disponibles para entrenar</label>
+        <select class="inp" id="eq-days">
+          <option value="3">3 días</option>
+          <option value="4" selected>4 días</option>
+          <option value="5">5 días</option>
+          <option value="6">6 días</option>
+        </select>
+      </div>
+      <div class="igrp"><label class="ilbl">Limitaciones del caballo (opcional)</label>
+        <input class="inp" id="eq-horse-limits" placeholder="Ej: problema de rodilla, recién herrado...">
+      </div>
+    </div>
+
+    <div class="mfooter">
+      <button class="btn btn-secondary" id="eq-q-back" onclick="eqQNav(-1)" style="display:none">Atrás</button>
+      <button class="btn btn-primary" id="eq-q-next" onclick="eqQNav(1)">Siguiente →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── AUTH ─────────────────────────────────────────────────────────────────────
+function hashPass(str){
+  let h=0;
+  for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str.charCodeAt(i); h|=0; }
+  return h.toString(36);
+}
+function getUsers(){ try{ return JSON.parse(localStorage.getItem('rl_users')||'{}'); }catch{ return {}; } }
+function saveUsers(u){ localStorage.setItem('rl_users', JSON.stringify(u)); }
+function currentUser(){ return sessionStorage.getItem('rl_session')||''; }
+
+function switchLoginTab(tab){
+  document.getElementById('ltab-login').classList.toggle('active', tab==='login');
+  document.getElementById('ltab-register').classList.toggle('active', tab==='register');
+  document.getElementById('auth-pass2-wrap').style.display = tab==='register'?'block':'none';
+  document.getElementById('auth-submit-btn').textContent = tab==='register'?'Crear cuenta':'Entrar';
+  document.getElementById('auth-submit-btn').dataset.mode = tab;
+  document.getElementById('login-error').classList.remove('show');
+}
+
+function showLoginError(msg){
+  const el=document.getElementById('login-error');
+  el.textContent=msg; el.classList.add('show');
+}
+
+function submitAuth(){
+  const mode = document.getElementById('auth-submit-btn').dataset.mode||'login';
+  const user = document.getElementById('auth-user').value.trim().toLowerCase().replace(/\s+/g,'');
+  const pass = document.getElementById('auth-pass').value;
+  if(!user){ showLoginError('Ingresá tu nombre de usuario'); return; }
+  if(!pass){ showLoginError('Ingresá tu contraseña'); return; }
+  if(user.length < 3){ showLoginError('El usuario debe tener al menos 3 caracteres'); return; }
+  const users = getUsers();
+  if(mode==='register'){
+    const pass2 = document.getElementById('auth-pass2').value;
+    if(pass !== pass2){ showLoginError('Las contraseñas no coinciden'); return; }
+    if(pass.length < 4){ showLoginError('La contraseña debe tener al menos 4 caracteres'); return; }
+    if(users[user]){ showLoginError('Ese usuario ya existe'); return; }
+    users[user] = { hash: hashPass(pass), created: new Date().toISOString() };
+    saveUsers(users);
+  } else {
+    if(!users[user]){ showLoginError('Usuario no encontrado'); return; }
+    if(users[user].hash !== hashPass(pass)){ showLoginError('Contraseña incorrecta'); return; }
+  }
+  sessionStorage.setItem('rl_session', user);
+  showApp(user);
+}
+
+function logout(){
+  if(!confirm('¿Cerrar sesión?')) return;
+  sessionStorage.removeItem('rl_session');
+  location.reload();
+}
+
+function showApp(user){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('main-nav').style.display='';
+  document.getElementById('main-content').style.display='';
+  document.getElementById('nav-username').textContent = user;
+  renderAll();
+}
+
+// Enter key en login
+['auth-user','auth-pass','auth-pass2'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('keydown',e=>{ if(e.key==='Enter') submitAuth(); });
+});
+
+// ─── STATE (con namespace por usuario) ───────────────────────────────────────
+const S = {
+  get(k, def){ try{ const v=localStorage.getItem('rl_'+currentUser()+'_'+k); return v!==null?JSON.parse(v):def; }catch{return def;} },
+  set(k,v){ localStorage.setItem('rl_'+currentUser()+'_'+k, JSON.stringify(v)); }
+};
+
+function today(){ return new Date().toISOString().split('T')[0]; }
+function fmt(d){ if(!d)return''; const [y,m,dd]=d.split('-'); return `${dd}/${m}/${y}`; }
+function uid(){ return Date.now()+Math.random().toString(36).slice(2,7); }
+
+const DEFAULT_TASKS = [
+  {id:'dt1',text:'Alimentar - mañana',time:'06:30',cat:'alimentacion'},
+  {id:'dt2',text:'Limpiar el box',time:'07:00',cat:'limpieza'},
+  {id:'dt3',text:'Sesión de entrenamiento',time:'08:00',cat:'ejercicio'},
+  {id:'dt4',text:'Alimentar - mediodía',time:'12:30',cat:'alimentacion'},
+  {id:'dt5',text:'Revisión general / cepillado',time:'17:00',cat:'limpieza'},
+  {id:'dt6',text:'Alimentar - tarde',time:'18:00',cat:'alimentacion'},
+];
+
+const QUOTES = [
+  {text:"Un jinete que no siente, no puede hacer sentir a su caballo.",author:"Antoine de Pluvinel"},
+  {text:"La equitación es el único deporte en el que la atleta puede llorar en el cuello de su compañero.",author:"Anónimo"},
+  {text:"El caballo hace al jinete, y el jinete hace al caballo.",author:"Proverbio ecuestre"},
+  {text:"El secreto del éxito es la consistencia del propósito.",author:"Benjamin Disraeli"},
+  {text:"No pares cuando estés cansada. Para cuando hayas terminado.",author:"Anónimo"},
+  {text:"El dolor que sientes hoy será la fuerza que sientas mañana.",author:"Anónimo"},
+  {text:"Montar a caballo no es un deporte, es una forma de vida.",author:"Anónimo"},
+  {text:"Tu cuerpo puede soportar casi cualquier cosa. Es tu mente la que hay que convencer.",author:"Anónimo"},
+  {text:"Los campeones no se hacen en los gimnasios. Los campeones se hacen de algo que llevan dentro.",author:"Muhammad Ali"},
+  {text:"La disciplina es el puente entre metas y logros.",author:"Jim Rohn"},
+];
+
+const ROUTINES = [
+  {name:"Fuerza ecuestre",desc:"Piernas, core y estabilidad",exercises:["Sentadillas 4×12","Peso muerto rumano 3×10","Estocadas 3×12c/pierna","Plancha lateral 3×30s","Hip thrust 4×12","Bird-dog 3×12c/lado"]},
+  {name:"Cardio + Core",desc:"Resistencia cardiovascular y centro",exercises:["Saltar soga 10min","Mountain climbers 3×30","Abdominales 4×20","Plancha frontal 3×45s","Remo con mancuerna 3×12","Burpees 3×10"]},
+  {name:"Movilidad",desc:"Flexibilidad y prevención de lesiones",exercises:["Apertura de cadera 2min","Estiramiento de aductores 2min","Rotación torácica 2×10","Estiramiento de isquios 2min","Círculos de tobillo 2×15","Yoga: guerrero I y II"]},
+  {name:"HIIT",desc:"Alta intensidad 25 minutos",exercises:["Jumping jacks 45s","Descanso 15s","Sentadillas con salto 45s","Descanso 15s","Push-ups 45s","Descanso 15s","Burpees 45s","Descanso 15s (×5 rondas)"]},
+];
+
+const CAT_ICONS = {equitacion:'🐴',gym:'🏋️',dieta:'🥗',personal:'🌟',competencia:'🏆'};
+const TASK_CAT_ICONS = {alimentacion:'🌾',limpieza:'🧹',ejercicio:'🏇',salud:'💊',otro:'📌'};
+
+// ─── TAB NAVIGATION ────────────────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+    renderAll();
+  });
+});
+
+document.querySelectorAll('.stab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const group = btn.dataset.group;
+    document.querySelectorAll(`.stab[data-group="${group}"]`).forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const stab = btn.dataset.stab;
+    document.querySelectorAll(`#stab-${group.replace(/[^a-z]/g,'')}-hoy, #stab-${group.replace(/[^a-z]/g,'')}-historial`);
+    // simpler approach: hide all subcontent in this section, show matching one
+    const section = btn.closest('.section');
+    section.querySelectorAll('.subcontent').forEach(s=>s.classList.remove('active'));
+    document.getElementById('stab-'+stab).classList.add('active');
+  });
+});
+
+// ─── MODALS ────────────────────────────────────────────────────────────────────
+function openModal(id){
+  // pre-fill dates
+  const d = today();
+  ['tr-date','hl-date','wo-date','goal-deadline'].forEach(fid=>{
+    const el=document.getElementById(fid); if(el&&!el.value) el.value=d;
+  });
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); }));
+
+// ─── HORSE PROFILE ─────────────────────────────────────────────────────────────
+function saveHorseProfile(){
+  const p = {
+    name: document.getElementById('hp-name').value.trim(),
+    breed: document.getElementById('hp-breed').value.trim(),
+    age: document.getElementById('hp-age').value.trim(),
+    color: document.getElementById('hp-color').value.trim(),
+    notes: document.getElementById('hp-notes').value.trim(),
+  };
+  S.set('horse', p);
+  closeModal('modal-horse-profile');
+  renderHorseProfile();
+}
+
+function renderHorseProfile(){
+  const p = S.get('horse', {});
+  const el = document.getElementById('horse-profile-display');
+  if(!p.name){ el.innerHTML=''; return; }
+  el.innerHTML=`<div class="horse-card">
+    <div class="horse-av">🐴</div>
+    <div>
+      <div class="horse-name">${p.name}</div>
+      <div class="horse-meta">${[p.breed,p.age?p.age+' años':'',p.color].filter(Boolean).join(' · ')}</div>
+      ${p.notes?`<div class="text-sm text-muted" style="margin-top:4px">${p.notes}</div>`:''}
+    </div>
+  </div>`;
+  // pre-fill modal fields
+  document.getElementById('hp-name').value=p.name||'';
+  document.getElementById('hp-breed').value=p.breed||'';
+  document.getElementById('hp-age').value=p.age||'';
+  document.getElementById('hp-color').value=p.color||'';
+  document.getElementById('hp-notes').value=p.notes||'';
+  const sub = document.getElementById('horse-subtitle');
+  if(sub && p.name) sub.textContent = p.name + ' — cuidado y entrenamiento';
+}
+
+// ─── HORSE TASKS ───────────────────────────────────────────────────────────────
+function getTasks(){ return S.get('tasks', DEFAULT_TASKS); }
+function getDoneToday(){
+  const all = S.get('tasks_done', {});
+  return all[today()] || [];
+}
+function setDoneToday(ids){
+  const all = S.get('tasks_done', {});
+  all[today()] = ids;
+  S.set('tasks_done', all);
+}
+
+function addTask(){
+  const text = document.getElementById('task-text').value.trim();
+  if(!text) return;
+  const tasks = getTasks();
+  tasks.push({id:uid(), text, time:document.getElementById('task-time').value, cat:document.getElementById('task-cat').value});
+  S.set('tasks', tasks);
+  document.getElementById('task-text').value='';
+  document.getElementById('task-time').value='';
+  closeModal('modal-add-task');
+  renderTasks();
+  renderInicio();
+}
+
+function toggleTask(id){
+  let done = getDoneToday();
+  done = done.includes(id) ? done.filter(x=>x!==id) : [...done, id];
+  setDoneToday(done);
+  renderTasks();
+  renderInicio();
+}
+
+function deleteTask(id){
+  if(!confirm('¿Eliminar esta tarea?')) return;
+  S.set('tasks', getTasks().filter(t=>t.id!==id));
+  renderTasks();
+  renderInicio();
+}
+
+function renderTasks(container='horse-tasks-list'){
+  const tasks = getTasks().sort((a,b)=>a.time.localeCompare(b.time));
+  const done = getDoneToday();
+  const el = document.getElementById(container);
+  if(!el) return;
+  if(!tasks.length){ el.innerHTML=`<div class="empty"><div class="empty-icon">📋</div><div class="empty-txt">Sin tareas. Agrega una arriba.</div></div>`; return; }
+  el.innerHTML = tasks.map(t=>`
+    <div class="chk ${done.includes(t.id)?'done':''}">
+      <input type="checkbox" id="chk-${t.id}" ${done.includes(t.id)?'checked':''} onchange="toggleTask('${t.id}')">
+      <label for="chk-${t.id}">${TASK_CAT_ICONS[t.cat]||'📌'} ${t.text}</label>
+      ${t.time?`<span class="chk-time">${t.time}</span>`:''}
+      <button class="chk-del" onclick="deleteTask('${t.id}')" title="Eliminar">✕</button>
+    </div>`).join('');
+}
+
+// ─── TRAINING ──────────────────────────────────────────────────────────────────
+function addTraining(){
+  const sessions = S.get('training', []);
+  sessions.unshift({id:uid(), date:document.getElementById('tr-date').value, type:document.getElementById('tr-type').value, duration:document.getElementById('tr-duration').value, rating:document.getElementById('tr-rating').value, notes:document.getElementById('tr-notes').value.trim()});
+  S.set('training', sessions);
+  closeModal('modal-add-training');
+  document.getElementById('tr-notes').value='';
+  document.getElementById('tr-duration').value='';
+  renderTraining();
+}
+function deleteTraining(id){ S.set('training', S.get('training',[]).filter(x=>x.id!==id)); renderTraining(); }
+function renderTraining(){
+  const el = document.getElementById('training-list');
+  if(!el) return;
+  const sessions = S.get('training',[]);
+  if(!sessions.length){ el.innerHTML=`<div class="empty"><div class="empty-icon">🏇</div><div class="empty-txt">Aún no hay sesiones registradas.</div></div>`; return; }
+  el.innerHTML = sessions.map(s=>{
+    const stars='⭐'.repeat(Number(s.rating)||3);
+    return `<div class="log-item">
+      <div class="log-hdr">
+        <div>
+          <div class="log-title">${s.type} ${stars}</div>
+          <div class="log-date">${fmt(s.date)}${s.duration?' · '+s.duration+' min':''}</div>
+        </div>
+        <button class="log-del" onclick="deleteTraining('${s.id}')">✕</button>
+      </div>
+      ${s.notes?`<div class="log-notes">${s.notes}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ─── HEALTH ────────────────────────────────────────────────────────────────────
+function addHealth(){
+  const logs = S.get('health',[]);
+  logs.unshift({id:uid(), date:document.getElementById('hl-date').value, type:document.getElementById('hl-type').value, notes:document.getElementById('hl-notes').value.trim()});
+  S.set('health', logs);
+  closeModal('modal-add-health');
+  document.getElementById('hl-notes').value='';
+  renderHealth();
+}
+function deleteHealth(id){ S.set('health', S.get('health',[]).filter(x=>x.id!==id)); renderHealth(); }
+function renderHealth(){
+  const el = document.getElementById('health-list');
+  if(!el) return;
+  const logs = S.get('health',[]);
+  if(!logs.length){ el.innerHTML=`<div class="empty"><div class="empty-icon">🩺</div><div class="empty-txt">Sin registros de salud aún.</div></div>`; return; }
+  el.innerHTML = logs.map(l=>`<div class="log-item">
+    <div class="log-hdr">
+      <div><div class="log-title">${l.type}</div><div class="log-date">${fmt(l.date)}</div></div>
+      <button class="log-del" onclick="deleteHealth('${l.id}')">✕</button>
+    </div>
+    ${l.notes?`<div class="log-notes">${l.notes}</div>`:''}
+  </div>`).join('');
+}
+
+// ─── GYM ───────────────────────────────────────────────────────────────────────
+function addWorkout(){
+  const workouts = S.get('workouts',[]);
+  const exercises = document.getElementById('wo-exercises').value.trim().split('\n').filter(Boolean);
+  workouts.unshift({id:uid(), date:document.getElementById('wo-date').value, type:document.getElementById('wo-type').value, duration:document.getElementById('wo-duration').value, exercises, notes:document.getElementById('wo-notes').value.trim()});
+  S.set('workouts', workouts);
+  closeModal('modal-add-workout');
+  document.getElementById('wo-exercises').value='';
+  document.getElementById('wo-notes').value='';
+  document.getElementById('wo-duration').value='';
+  renderGym();
+}
+function deleteWorkout(id){ S.set('workouts', S.get('workouts',[]).filter(x=>x.id!==id)); renderGym(); }
+
+function renderGym(){
+  const workouts = S.get('workouts',[]);
+  const todayWorkouts = workouts.filter(w=>w.date===today());
+
+  // Today
+  const elToday = document.getElementById('gym-today-content');
+  if(elToday){
+    if(!todayWorkouts.length){
+      elToday.innerHTML=`<div class="empty"><div class="empty-icon">🏋️</div><div class="empty-txt">No has registrado entrenamiento hoy.<br><br></div></div><div style="text-align:center"><button class="btn btn-primary" onclick="openModal('modal-add-workout')">Registrar sesión</button></div>`;
+    } else {
+      elToday.innerHTML = todayWorkouts.map(w=>`<div class="card">
+        <div class="flex justify-between items-center mb8">
+          <div><span class="tag tag-brown">${w.type}</span>${w.duration?` <span class="tag tag-green" style="margin-left:6px">${w.duration} min</span>`:''}</div>
+          <button class="log-del" onclick="deleteWorkout('${w.id}')">✕</button>
+        </div>
+        ${w.exercises.length?`<div style="margin-top:10px">${w.exercises.map(e=>`<div class="ex-row"><div class="ex-name">${e}</div></div>`).join('')}</div>`:''}
+        ${w.notes?`<div class="text-sm text-muted" style="margin-top:10px">${w.notes}</div>`:''}
+      </div>`).join('');
+    }
+  }
+
+  // Routines
+  const elRut = document.getElementById('gym-routines-content');
+  if(elRut){
+    elRut.innerHTML = ROUTINES.map(r=>`<div class="card">
+      <div class="card-title">${r.name}</div>
+      <div class="text-sm text-muted mb12">${r.desc}</div>
+      ${r.exercises.map(e=>`<div class="chk"><div style="font-size:13px">▸ ${e}</div></div>`).join('')}
+      <div style="margin-top:14px">
+        <button class="btn btn-secondary btn-sm" onclick="useRoutine('${r.name}','${r.exercises.join('|')}')">Usar esta rutina hoy</button>
+      </div>
+    </div>`).join('');
+  }
+
+  // History
+  const elHist = document.getElementById('gym-history-content');
+  if(elHist){
+    if(!workouts.length){ elHist.innerHTML=`<div class="empty"><div class="empty-icon">📅</div><div class="empty-txt">Sin entrenamientos registrados.</div></div>`; return; }
+    elHist.innerHTML = workouts.map(w=>`<div class="log-item">
+      <div class="log-hdr">
+        <div><div class="log-title">${w.type}${w.duration?' · '+w.duration+' min':''}</div><div class="log-date">${fmt(w.date)}</div></div>
+        <button class="log-del" onclick="deleteWorkout('${w.id}')">✕</button>
+      </div>
+      ${w.exercises.length?`<div class="log-notes">${w.exercises.join(' · ')}</div>`:''}
+      ${w.notes?`<div class="log-notes">${w.notes}</div>`:''}
+    </div>`).join('');
+  }
+}
+
+function useRoutine(name, exercisesStr){
+  document.getElementById('wo-date').value = today();
+  document.getElementById('wo-type').value = 'Fuerza';
+  document.getElementById('wo-exercises').value = exercisesStr.split('|').join('\n');
+  openModal('modal-add-workout');
+}
+
+// ─── DIET ──────────────────────────────────────────────────────────────────────
+function getMeals(){ return S.get('meals',[]); }
+function addMeal(){
+  const meals = getMeals();
+  const cals = parseInt(document.getElementById('meal-cals').value)||0;
+  meals.push({id:uid(), date:today(), slot:document.getElementById('meal-slot-select').value, food:document.getElementById('meal-food').value.trim(), cals});
+  S.set('meals', meals);
+  document.getElementById('meal-food').value='';
+  document.getElementById('meal-cals').value='';
+  closeModal('modal-add-meal');
+  renderDiet();
+}
+function deleteMeal(id){ S.set('meals', getMeals().filter(m=>m.id!==id)); renderDiet(); }
+
+function getWater(){ return (S.get('water',{}))[today()]||0; }
+function setWater(n){ const w=S.get('water',{}); w[today()]=n; S.set('water',w); }
+
+function renderDiet(){
+  const SLOTS = ['Desayuno','Almuerzo','Merienda','Cena'];
+  const SLOT_ICONS = {Desayuno:'🌅',Almuerzo:'☀️',Merienda:'🍎',Cena:'🌙'};
+  const todayMeals = getMeals().filter(m=>m.date===today());
+  const totalCals = todayMeals.reduce((s,m)=>s+m.cals,0);
+  const calGoal = S.get('cal_goal',2000);
+  const water = getWater();
+  const waterGoal = 8;
+
+  const elToday = document.getElementById('diet-today-content');
+  if(elToday){
+    const pct = Math.min(100, Math.round(totalCals/calGoal*100));
+    elToday.innerHTML=`
+      <div class="grid2 mb16">
+        <div class="card" style="text-align:center">
+          <div class="card-title" style="justify-content:center">🔥 Calorías</div>
+          <div style="font-size:28px;font-weight:700;color:var(--primary)">${totalCals}</div>
+          <div class="text-sm text-muted mb8">/ ${calGoal} kcal</div>
+          <div class="progress"><div class="progress-fill prog-primary" style="width:${pct}%"></div></div>
+          <div style="margin-top:12px">
+            <button class="btn btn-ghost btn-sm" onclick="changeCalGoal()">Meta: ${calGoal} kcal</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">💧 Agua</div>
+          <div class="water-grid" id="water-grid"></div>
+          <div class="text-sm text-muted" style="margin-top:10px">${water} / ${waterGoal} vasos</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="flex justify-between items-center mb12">
+          <div class="card-title" style="margin:0">🍽️ Comidas de hoy</div>
+          <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-meal')">+ Agregar</button>
+        </div>
+        ${SLOTS.map(slot=>{
+          const items = todayMeals.filter(m=>m.slot===slot);
+          const slotCals = items.reduce((s,m)=>s+m.cals,0);
+          return `<div class="meal-slot">
+            <div class="meal-hdr">
+              <div class="meal-title">${SLOT_ICONS[slot]} ${slot}</div>
+              ${slotCals?`<span class="tag tag-gold">${slotCals} kcal</span>`:''}
+            </div>
+            ${items.length ? items.map(m=>`<div class="meal-item">
+              <span>${m.food}</span>
+              <span class="meal-cals">${m.cals?m.cals+' kcal':''}</span>
+              <button class="btn-icon" onclick="deleteMeal('${m.id}')" style="font-size:12px">✕</button>
+            </div>`).join('') : `<div class="text-muted text-sm" style="padding:4px 0">Sin registros</div>`}
+          </div>`;
+        }).join('')}
+      </div>`;
+    // render water glasses
+    const wg = document.getElementById('water-grid');
+    if(wg){
+      wg.innerHTML = Array.from({length:waterGoal},(_,i)=>`<div class="wglass ${i<water?'full':''}" onclick="toggleWater(${i+1})" title="${i+1} vaso${i?'s':''}">💧</div>`).join('');
+    }
+  }
+
+  const elHist = document.getElementById('diet-history-content');
+  if(elHist){
+    const allMeals = getMeals();
+    const days = [...new Set(allMeals.map(m=>m.date))].sort((a,b)=>b.localeCompare(a));
+    if(!days.length){ elHist.innerHTML=`<div class="empty"><div class="empty-icon">🥗</div><div class="empty-txt">Sin historial aún.</div></div>`; return; }
+    elHist.innerHTML = days.slice(0,14).map(d=>{
+      const dayMeals = allMeals.filter(m=>m.date===d);
+      const cals = dayMeals.reduce((s,m)=>s+m.cals,0);
+      return `<div class="log-item">
+        <div class="log-hdr"><div class="log-title">${fmt(d)}</div><div class="log-date">${cals} kcal · ${dayMeals.length} registros</div></div>
+        <div class="log-notes">${dayMeals.map(m=>`${m.slot}: ${m.food}`).join(' · ')}</div>
+      </div>`;
+    }).join('');
+  }
+}
+
+function toggleWater(n){ const w=getWater(); setWater(w===n?n-1:n); renderDiet(); renderInicio(); }
+function changeCalGoal(){
+  const v = prompt('Meta diaria de calorías:', S.get('cal_goal',2000));
+  if(v && !isNaN(v)){ S.set('cal_goal', parseInt(v)); renderDiet(); }
+}
+
+// ─── GOALS ─────────────────────────────────────────────────────────────────────
+function addGoal(){
+  const goals = S.get('goals',[]);
+  goals.push({id:uid(), title:document.getElementById('goal-title').value.trim(), cat:document.getElementById('goal-cat').value, deadline:document.getElementById('goal-deadline').value, notes:document.getElementById('goal-notes').value.trim(), done:false, created:today()});
+  S.set('goals', goals);
+  document.getElementById('goal-title').value='';
+  document.getElementById('goal-notes').value='';
+  closeModal('modal-add-goal');
+  renderMotivacion();
+}
+function toggleGoal(id){
+  const goals = S.get('goals',[]);
+  const g = goals.find(x=>x.id===id);
+  if(g){ g.done=!g.done; g.doneDate=g.done?today():null; }
+  S.set('goals', goals);
+  renderMotivacion();
+}
+function deleteGoal(id){ if(!confirm('¿Eliminar objetivo?')) return; S.set('goals', S.get('goals',[]).filter(x=>x.id!==id)); renderMotivacion(); }
+
+function renderGoals(){
+  const el = document.getElementById('goals-list');
+  if(!el) return;
+  const goals = S.get('goals',[]);
+  const active = goals.filter(g=>!g.done);
+  const done = goals.filter(g=>g.done);
+  if(!goals.length){ el.innerHTML=`<div class="empty"><div class="empty-icon">🎯</div><div class="empty-txt">Agrega tu primer objetivo.</div></div>`; return; }
+  const render = list=>list.map(g=>`<div class="goal-item ${g.done?'done':''}">
+    <div class="goal-hdr">
+      <div class="goal-icon">${CAT_ICONS[g.cat]||'🌟'}</div>
+      <div class="goal-body">
+        <div class="goal-title">${g.title}</div>
+        <div class="goal-meta">${g.deadline?'📅 '+fmt(g.deadline):''} ${g.notes?'· '+g.notes:''}</div>
+      </div>
+      <div class="flex gap8">
+        <button class="btn-icon" onclick="toggleGoal('${g.id}')" title="${g.done?'Reabrir':'Completar'}">${g.done?'↩':'✓'}</button>
+        <button class="btn-icon" onclick="deleteGoal('${g.id}')" title="Eliminar">🗑</button>
+      </div>
+    </div>
+  </div>`).join('');
+  el.innerHTML = (active.length?`<div style="margin-bottom:4px;font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">Activos (${active.length})</div>`+render(active):'') +
+    (done.length?`<div style="margin:12px 0 4px;font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">Completados (${done.length})</div>`+render(done):'');
+}
+
+// ─── HABITS ────────────────────────────────────────────────────────────────────
+function renderHabits(){
+  const el = document.getElementById('habits-content');
+  if(!el) return;
+  const DAYS = ['D','L','M','M','J','V','S'];
+  const HABIT_LIST = [
+    {key:'horse_done', label:'🐴 Tareas del caballo'},
+    {key:'workout_done', label:'🏋️ Entrenamiento en gym'},
+    {key:'diet_logged', label:'🥗 Comidas registradas'},
+    {key:'water_done', label:'💧 Agua completa (8 vasos)'},
+  ];
+
+  // build last 28 days
+  const days28 = [];
+  for(let i=27;i>=0;i--){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    days28.push(d.toISOString().split('T')[0]);
+  }
+
+  const tasksData = S.get('tasks_done',{});
+  const allTasks = getTasks();
+  const workouts = S.get('workouts',[]);
+  const meals = getMeals();
+  const waterData = S.get('water',{});
+
+  el.innerHTML = HABIT_LIST.map(h=>{
+    const doneSet = new Set();
+    days28.forEach(d=>{
+      let done = false;
+      if(h.key==='horse_done'){
+        const doneTasks = tasksData[d]||[];
+        done = allTasks.length > 0 && doneTasks.length >= Math.max(1, Math.floor(allTasks.length*0.5));
+      } else if(h.key==='workout_done'){
+        done = workouts.some(w=>w.date===d);
+      } else if(h.key==='diet_logged'){
+        done = meals.filter(m=>m.date===d).length >= 2;
+      } else if(h.key==='water_done'){
+        done = (waterData[d]||0) >= 8;
+      }
+      if(done) doneSet.add(d);
+    });
+    const streak = calcStreak(doneSet, days28);
+    return `<div class="card">
+      <div class="flex justify-between items-center mb12">
+        <div class="card-title" style="margin:0">${h.label}</div>
+        <span class="tag tag-gold">🔥 ${streak} días</span>
+      </div>
+      <div class="habit-labels">${DAYS.map(d=>`<div class="habit-label">${d}</div>`).join('')}</div>
+      <div class="habit-grid">
+        ${days28.map(d=>`<button class="hday ${doneSet.has(d)?'done':''} ${d===today()?'today':''}" title="${fmt(d)}"></button>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function calcStreak(doneSet, days){
+  let streak=0;
+  for(let i=days.length-1;i>=0;i--){
+    if(doneSet.has(days[i])) streak++; else break;
+  }
+  return streak;
+}
+
+// ─── ACHIEVEMENTS ──────────────────────────────────────────────────────────────
+function renderAchievements(){
+  const el = document.getElementById('achievements-content');
+  if(!el) return;
+  const workouts = S.get('workouts',[]);
+  const training = S.get('training',[]);
+  const goals = S.get('goals',[]).filter(g=>g.done);
+  const tasksData = S.get('tasks_done',{});
+  const daysWithTasks = Object.values(tasksData).filter(arr=>arr.length>0).length;
+
+  const achs = [
+    {icon:'🌟',title:'Primera sesión',desc:'Registraste tu primer entrenamiento en gym',unlocked:workouts.length>=1},
+    {icon:'💪',title:'10 entrenamientos',desc:'Completaste 10 sesiones de gym',unlocked:workouts.length>=10},
+    {icon:'🏋️',title:'Mes de gym',desc:'30 entrenamientos registrados',unlocked:workouts.length>=30},
+    {icon:'🐴',title:'Primer entreno ecuestre',desc:'Registraste tu primera sesión con el caballo',unlocked:training.length>=1},
+    {icon:'🏇',title:'Amazona dedicada',desc:'20 sesiones ecuestres registradas',unlocked:training.length>=20},
+    {icon:'🎯',title:'Primer objetivo',desc:'Completaste tu primer objetivo',unlocked:goals.length>=1},
+    {icon:'🏆',title:'Imparable',desc:'5 objetivos completados',unlocked:goals.length>=5},
+    {icon:'🔥',title:'Constancia',desc:'Cuidaste a tu caballo 7 días seguidos',unlocked:daysWithTasks>=7},
+    {icon:'💎',title:'Nivel élite',desc:'30 días de cuidado del caballo',unlocked:daysWithTasks>=30},
+    {icon:'🌈',title:'Vida completa',desc:'Registraste gym + dieta + caballo el mismo día',unlocked:checkAllSameDay()},
+  ];
+
+  el.innerHTML=`<div class="card">${achs.map(a=>`<div class="ach ${a.unlocked?'':'locked'}">
+    <div class="ach-icon">${a.icon}</div>
+    <div><div class="ach-title">${a.title}${a.unlocked?' ✓':''}</div><div class="ach-desc">${a.desc}</div></div>
+  </div>`).join('')}</div>`;
+}
+
+function checkAllSameDay(){
+  const workouts = S.get('workouts',[]);
+  const training = S.get('training',[]);
+  const meals = getMeals();
+  const wDays = new Set(workouts.map(w=>w.date));
+  const tDays = new Set(training.map(t=>t.date));
+  return meals.some(m=>wDays.has(m.date)&&tDays.has(m.date));
+}
+
+// ─── STREAK (overall app usage) ───────────────────────────────────────────────
+function updateStreak(){
+  let s = S.get('streak',{count:0,last:''});
+  const t = today();
+  if(s.last===t) return s.count;
+  const yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
+  const yStr = yesterday.toISOString().split('T')[0];
+  if(s.last===yStr){ s.count++; } else if(s.last!==t){ s.count=1; }
+  s.last=t;
+  S.set('streak', s);
+  return s.count;
+}
+
+// ─── INICIO ────────────────────────────────────────────────────────────────────
+function renderInicio(){
+  // Greeting
+  const h = new Date().getHours();
+  const greet = h<12?'¡Buenos días':h<18?'¡Buenas tardes':'¡Buenas noches';
+  const p = S.get('horse',{});
+  document.getElementById('greeting').textContent = greet+(p.name?', jinete! 🐴':'!');
+  const days=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+  const months=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const now = new Date();
+  document.getElementById('greeting-sub').textContent=`${days[now.getDay()]}, ${now.getDate()} de ${months[now.getMonth()]} de ${now.getFullYear()}`;
+
+  // Quote
+  const qi = Math.floor(new Date().getDate() % QUOTES.length);
+  const q = QUOTES[qi];
+  document.getElementById('quote-box').innerHTML=`<div class="quote-text">${q.text}</div><div class="quote-author">— ${q.author}</div>`;
+
+  // Stats
+  const tasks = getTasks(), done=getDoneToday();
+  const workouts=S.get('workouts',[]), water=getWater();
+  const todayWorkout = workouts.some(w=>w.date===today());
+  const todayMeals = getMeals().filter(m=>m.date===today());
+  const calGoal=S.get('cal_goal',2000), totalCals=todayMeals.reduce((s,m)=>s+m.cals,0);
+  const streakCount = updateStreak();
+
+  document.getElementById('stats-grid').innerHTML=`
+    <div class="stat"><div class="stat-icon">🐴</div><div class="stat-val">${done.length}/${tasks.length}</div><div class="stat-lbl">Tareas caballo</div></div>
+    <div class="stat"><div class="stat-icon">🏋️</div><div class="stat-val">${todayWorkout?'✓':'—'}</div><div class="stat-lbl">Gym hoy</div></div>
+    <div class="stat"><div class="stat-icon">🔥</div><div class="stat-val">${totalCals}</div><div class="stat-lbl">Kcal hoy</div></div>
+    <div class="stat"><div class="stat-icon">💧</div><div class="stat-val">${water}/8</div><div class="stat-lbl">Vasos agua</div></div>`;
+
+  // Quick horse tasks
+  const qtEl = document.getElementById('inicio-horse-tasks');
+  if(qtEl){
+    const sorted = tasks.sort((a,b)=>a.time.localeCompare(b.time)).slice(0,5);
+    qtEl.innerHTML = sorted.length ? sorted.map(t=>`
+      <div class="chk ${done.includes(t.id)?'done':''}">
+        <input type="checkbox" id="iq-${t.id}" ${done.includes(t.id)?'checked':''} onchange="toggleTask('${t.id}')">
+        <label for="iq-${t.id}">${TASK_CAT_ICONS[t.cat]||'📌'} ${t.text}</label>
+        ${t.time?`<span class="chk-time">${t.time}</span>`:''}
+      </div>`).join('') : `<div class="text-sm text-muted">Sin tareas. Ve a "Mi Caballo" para agregar.</div>`;
+  }
+
+  // Water + gym quick
+  const wEl = document.getElementById('inicio-water');
+  if(wEl){
+    wEl.innerHTML=`<div class="water-grid">${Array.from({length:8},(_,i)=>`<div class="wglass ${i<water?'full':''}" onclick="toggleWater(${i+1})">💧</div>`).join('')}</div>`;
+  }
+  const gEl = document.getElementById('inicio-gym');
+  if(gEl){
+    gEl.innerHTML = todayWorkout
+      ? `<div class="tag tag-green">✓ Entrenamiento registrado hoy</div>`
+      : `<div class="text-sm text-muted">Sin sesión hoy. <button class="btn btn-secondary btn-sm" style="margin-left:6px" onclick="document.querySelector('[data-tab=gimnasio]').click()">Ir al gym</button></div>`;
+  }
+}
+
+function renderMotivacion(){
+  renderGoals();
+  renderHabits();
+  renderAchievements();
+}
+
+// ─── CALENDAR ─────────────────────────────────────────────────────────────────
+let calYear = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+
+const CAL_COLORS = {vet:'#4A7A9B',herrador:'#8B4513',vacuna:'#4A7C59',despar:'#DAA520',dent:'#C0392B',comp:'#9B59B6',otro:'#888'};
+const CAL_LABELS = {vet:'🩺 Veterinario',herrador:'🔨 Herrador',vacuna:'💉 Vacuna',despar:'🧪 Desparasitación',dent:'🦷 Dentista',comp:'🏆 Competencia',otro:'📌 Otro'};
+
+function calNav(dir){ calMonth+=dir; if(calMonth>11){calMonth=0;calYear++;} if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
+
+function addCalEvent(){
+  const events = S.get('cal_events',[]);
+  const title = document.getElementById('cal-title').value.trim();
+  const date = document.getElementById('cal-date').value;
+  if(!title||!date){ alert('Completá el título y la fecha'); return; }
+  events.push({id:uid(), type:document.getElementById('cal-type').value, title, date, notes:document.getElementById('cal-notes').value.trim()});
+  S.set('cal_events', events);
+  document.getElementById('cal-title').value='';
+  document.getElementById('cal-notes').value='';
+  closeModal('modal-cal-event');
+  renderCalendar();
+}
+
+function deleteCalEvent(id){ S.set('cal_events', S.get('cal_events',[]).filter(e=>e.id!==id)); renderCalendar(); }
+
+function renderCalendar(){
+  const MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const DAY_LABELS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const lbl = document.getElementById('cal-month-label');
+  const grid = document.getElementById('cal-grid');
+  const upcoming = document.getElementById('cal-upcoming-list');
+  if(!lbl) return;
+
+  lbl.textContent = MONTHS[calMonth] + ' ' + calYear;
+  const events = S.get('cal_events',[]);
+  const todayStr = today();
+
+  // Build day labels
+  let html = DAY_LABELS.map(d=>`<div class="cal-label">${d}</div>`).join('');
+
+  // First day of month
+  const first = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  const daysInPrev = new Date(calYear, calMonth, 0).getDate();
+
+  for(let i=0;i<first;i++){
+    const d = daysInPrev - first + 1 + i;
+    html += `<div class="cal-day other-month"><div class="cal-day-num">${d}</div></div>`;
+  }
+
+  for(let d=1;d<=daysInMonth;d++){
+    const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dayEvents = events.filter(e=>e.date===dateStr);
+    const isToday = dateStr===todayStr;
+    const dots = dayEvents.map(e=>`<div class="cal-dot cal-dot-${e.type}"></div>`).join('');
+    html += `<div class="cal-day ${isToday?'today':''}" onclick="calDayClick('${dateStr}')"><div class="cal-day-num">${d}</div>${dots}</div>`;
+  }
+
+  // Fill remaining
+  const total = first + daysInMonth;
+  const remaining = total%7===0?0:7-(total%7);
+  for(let i=1;i<=remaining;i++) html+=`<div class="cal-day other-month"><div class="cal-day-num">${i}</div></div>`;
+
+  grid.innerHTML = html;
+
+  // Upcoming events (next 60 days)
+  const now = new Date(); now.setHours(0,0,0,0);
+  const future = events.filter(e=>new Date(e.date)>=now).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,8);
+
+  if(!future.length){ upcoming.innerHTML='<div class="text-sm text-muted" style="padding:8px 0">Sin eventos próximos</div>'; }
+  else {
+    upcoming.innerHTML = future.map(e=>{
+      const diff = Math.round((new Date(e.date)-now)/(1000*60*60*24));
+      const soon = diff===0?'Hoy':diff===1?'Mañana':diff<=7?`En ${diff} días`:'';
+      return `<div class="cal-event">
+        <div class="cal-event-dot" style="background:${CAL_COLORS[e.type]||'#888'}"></div>
+        <div class="cal-event-info">
+          <div class="cal-event-title">${CAL_LABELS[e.type]||e.type} — ${e.title}</div>
+          <div class="cal-event-date">${fmt(e.date)}${e.notes?' · '+e.notes:''}</div>
+        </div>
+        ${soon?`<span class="cal-event-soon">${soon}</span>`:''}
+        <button class="log-del" onclick="deleteCalEvent('${e.id}')">✕</button>
+      </div>`;
+    }).join('');
+  }
+}
+
+function calDayClick(dateStr){
+  document.getElementById('cal-date').value = dateStr;
+  openModal('modal-cal-event');
+}
+
+// ─── PREMIUM ──────────────────────────────────────────────────────────────────
+const PREMIUM_CODE = 'RIDER2024';
+function isPremium(){ return S.get('premium',false); }
+
+function activatePremium(){
+  const code = document.getElementById('premium-code').value.trim().toUpperCase();
+  const errEl = document.getElementById('premium-error');
+  if(code !== PREMIUM_CODE){ errEl.textContent='Código incorrecto'; errEl.classList.add('show'); return; }
+  S.set('premium',true);
+  closeModal('modal-premium');
+  document.getElementById('premium-code').value='';
+  errEl.classList.remove('show');
+  renderGymPersonal();
+  renderEquestrianPlan();
+  alert('✅ ¡Premium activado! Ya podés usar el plan personalizado.');
+}
+
+// ─── GYM PERSONAL ─────────────────────────────────────────────────────────────
+let gymQStep = 1;
+const GYM_Q_TOTAL = 3;
+
+function gymQNav(dir){
+  if(dir===1){
+    if(gymQStep===1){ const a=document.getElementById('gq-age').value,w=document.getElementById('gq-weight').value,h=document.getElementById('gq-height').value; if(!a||!w||!h){alert('Completá todos los datos');return;} }
+    if(gymQStep===GYM_Q_TOTAL){ buildGymPlan(); return; }
+  }
+  gymQStep = Math.max(1, Math.min(GYM_Q_TOTAL, gymQStep+dir));
+  updateGymQUI();
+}
+
+function updateGymQUI(){
+  for(let i=1;i<=GYM_Q_TOTAL;i++){
+    document.getElementById('gym-q-'+i).classList.toggle('active', i===gymQStep);
+  }
+  document.getElementById('gym-q-back').style.display = gymQStep>1?'':'none';
+  document.getElementById('gym-q-next').textContent = gymQStep===GYM_Q_TOTAL?'Generar mi plan 🎯':'Siguiente →';
+  const dots = document.getElementById('gym-q-progress');
+  dots.innerHTML = Array.from({length:GYM_Q_TOTAL},(_,i)=>`<div class="q-dot ${i<gymQStep?'done':''}"></div>`).join('');
+}
+
+function buildGymPlan(){
+  const p = {
+    gender: document.getElementById('gq-gender').value,
+    age: parseInt(document.getElementById('gq-age').value),
+    weight: parseFloat(document.getElementById('gq-weight').value),
+    height: parseFloat(document.getElementById('gq-height').value),
+    level: document.getElementById('gq-level').value,
+    goal: document.getElementById('gq-goal').value,
+    equipment: document.getElementById('gq-equipment').value,
+    days: parseInt(document.getElementById('gq-days').value),
+    duration: parseInt(document.getElementById('gq-duration').value),
+    injuries: document.getElementById('gq-injuries').value,
+  };
+  p.bmi = (p.weight / Math.pow(p.height/100, 2)).toFixed(1);
+  S.set('gym_profile', p);
+  S.set('gym_plan', generateGymPlan(p));
+  closeModal('modal-gym-q');
+  gymQStep=1; updateGymQUI();
+  renderGymPersonal();
+}
+
+const EX = {
+  legs:{
+    none:['Sentadillas','Estocadas','Sentadilla sumo','Puente de glúteos','Hip thrust','Step-up en silla','Sentadilla pistola asistida','Wall sit'],
+    basic:['Sentadillas con mancuerna','Goblet squat','Estocadas con peso','Peso muerto rumano','Hip thrust con mancuerna','Sentadilla búlgara'],
+    full:['Sentadilla con barra','Peso muerto','Prensa de piernas','Extensión de cuádriceps','Curl de isquios','Hip thrust con barra','Hack squat','Sentadilla frontal']
+  },
+  core:{
+    none:['Plancha frontal','Plancha lateral','Crunches','Bird-dog','Dead bug','Mountain climbers','Hollow hold','Superman'],
+    basic:['Plancha con peso','Russian twist','Pallof press con banda','Ab rollout con banda','Woodchop con mancuerna'],
+    full:['Cable crunch','Ab wheel','Decline sit-ups','Jalón de polea para core','Rotación en cable']
+  },
+  push:{
+    none:['Flexiones','Flexiones declinadas','Flexiones diamante','Dips en silla','Pike push-ups','Archer push-ups'],
+    basic:['Press con mancuernas','Press inclinado mancuerna','Vuelos laterales','Press de hombros','Extensión de tríceps','Aperturas con mancuerna'],
+    full:['Press de banca','Press inclinado','Press militar','Fondos en paralelas','Vuelos en cable','Press Arnold']
+  },
+  pull:{
+    none:['Superman','Remo invertido en mesa','Chin-ups asistidos','Face pulls con toalla'],
+    basic:['Remo con mancuerna','Curl de bíceps','Remo en W con bandas','Face pulls con banda','Jalones con banda'],
+    full:['Dominadas','Remo con barra','Jalón al pecho','Curl de bíceps con barra','Remo en polea baja','Pull-over']
+  },
+  cardio:{
+    none:['Saltar soga 3×3min','Burpees 3×12','Jumping jacks 3×45s','High knees 3×45s','Mountain climbers 3×45s','Skipping 3×1min'],
+    basic:['Saltar soga 3×3min','Kettlebell swings 3×15','Burpees con peso 3×10','Box jumps 3×12'],
+    full:['Cinta 20min ritmo moderado','Bicicleta 15min intervalos','HIIT en cinta 20min','Remo ergómetro 15min']
+  },
+  mobility:['Apertura de cadera 2×1min','Estiramiento isquiotibiales 2×45s','Rotación torácica 2×10','World greatest stretch 2×5c/lado','Flexor de cadera 2×45s','Pigeon pose 2×1min','Cat-cow 2×10']
+};
+
+function pick(arr, n){ const s=[...arr]; const r=[]; for(let i=0;i<Math.min(n,s.length);i++){const j=Math.floor(Math.random()*s.length);r.push(s.splice(j,1)[0]);} return r; }
+
+function generateGymPlan(p){
+  const eq = p.equipment;
+  const getSetsReps = ()=>{
+    if(p.goal==='perder_grasa') return {sets:'3',reps:'15-20',rest:'30s'};
+    if(p.goal==='ganar_musculo') return {sets:'4',reps:'8-12',rest:'90s'};
+    if(p.goal==='tonificar') return {sets:'3',reps:'12-15',rest:'60s'};
+    if(p.goal==='ecuestre') return {sets:'3',reps:'15',rest:'45s'};
+    return {sets:'2',reps:'12',rest:'45s'};
+  };
+  const sr = getSetsReps();
+
+  // Filter out exercises based on injuries
+  const filterInjury = (exList) => exList.filter(e=>{
+    if(p.injuries==='rodilla' && /sentadilla|estocada|prensa|extensión|curl/i.test(e)) return false;
+    if(p.injuries==='espalda' && /peso muerto|remo|superman/i.test(e)) return false;
+    if(p.injuries==='hombro' && /press|vuelo|arnold|militar/i.test(e)) return false;
+    return true;
+  });
+
+  const legs = filterInjury(EX.legs[eq]);
+  const core = EX.core[eq];
+  const push = filterInjury(EX.push[eq]);
+  const pull = EX.pull[eq];
+  const cardio = EX.cardio[eq];
+  const mobility = EX.mobility;
+
+  // Goals-specific emphasis
+  let emphasis = '';
+  if(p.goal==='ecuestre') emphasis='Core, glúteos y equilibrio son clave para la equitación. Enfocá en estabilidad.';
+  else if(p.goal==='perder_grasa') emphasis=`Con tu IMC de ${p.bmi}, combiná fuerza y cardio para máximos resultados.`;
+  else if(p.goal==='ganar_musculo') emphasis='Progresión de carga: aumentá el peso cada 2 semanas si el último set se hace fácil.';
+  else if(p.goal==='flexibilidad') emphasis='Hacé los estiramientos en caliente, mantené cada posición 45-60 segundos.';
+
+  const buildDay = (focus, exList1, exList2, withCardio=false) => {
+    const warmup = ['Trote suave 5min','Círculos de brazo 2×15','Sentadillas de calentamiento 2×10','Cadera en 4 puntos 2×10'];
+    const main = [...pick(exList1,3), ...pick(exList2,2)];
+    const cooldown = pick(mobility, 4);
+    return {focus, warmup, main: main.map(e=>({name:e,...sr})), cardio: withCardio?pick(cardio,1):[], cooldown};
+  };
+
+  const days = [];
+  const GOALS_SPLITS = {
+    2: [['Cuerpo completo A',legs,core],['Cuerpo completo B',push,pull]],
+    3: [['Tren inferior + Core',legs,core],['Empuje + Core',push,core],['Tirón + Core',pull,core]],
+    4: [['Tren superior A',push,pull],['Tren inferior A',legs,core],['Tren superior B',push,core],['Tren inferior B',legs,pull]],
+    5: [['Pecho + Tríceps',push,core],['Espalda + Bíceps',pull,core],['Piernas + Glúteos',legs,core],['Hombros + Core',push,core],['Full body + Cardio',legs,pull]],
+  };
+
+  const DAY_NAMES = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+  const split = GOALS_SPLITS[p.days]||GOALS_SPLITS[3];
+  let dayIdx = 0;
+  let workDays = 0;
+  while(workDays < p.days && dayIdx < 7){
+    const s = split[workDays % split.length];
+    const withCardio = p.goal==='perder_grasa' && workDays%2===0;
+    days.push({day: DAY_NAMES[dayIdx], ...buildDay(s[0],s[1],s[2],withCardio), type:'training'});
+    workDays++; dayIdx++;
+    if(workDays < p.days && dayIdx%3===0){ days.push({day:DAY_NAMES[dayIdx],type:'rest',focus:'Descanso activo'}); dayIdx++; }
+  }
+
+  return {profile:p, days, emphasis, created: today()};
+}
+
+function renderGymPersonal(){
+  const el = document.getElementById('gym-personal-content');
+  if(!el) return;
+  if(!isPremium()){
+    el.innerHTML=`<div class="premium-lock">
+      <div class="premium-icon">💎</div>
+      <div class="premium-title">Plan de Gym Personalizado</div>
+      <div class="premium-desc">Tu plan de entrenamiento 100% adaptado a tu cuerpo, objetivo y equipamiento disponible. Incluye rutinas semanales, ejercicios específicos, series, repeticiones y progresión.</div>
+      <div class="premium-price">$4.99 USD</div>
+      <div class="premium-period">pago único · acceso de por vida</div>
+      <button class="btn btn-primary" onclick="openModal('modal-premium')" style="margin-right:8px">🔑 Tengo un código</button>
+    </div>`;
+    return;
+  }
+  const plan = S.get('gym_plan', null);
+  if(!plan){
+    el.innerHTML=`<div class="card" style="text-align:center;padding:32px">
+      <div style="font-size:40px;margin-bottom:12px">🏋️</div>
+      <div style="font-size:16px;font-weight:600;margin-bottom:8px">Creá tu plan personalizado</div>
+      <div class="text-sm text-muted mb16">Respondé unas preguntas y generamos tu plan ideal</div>
+      <button class="btn btn-primary" onclick="gymQStep=1;updateGymQUI();openModal('modal-gym-q')">Empezar cuestionario</button>
+    </div>`;
+    return;
+  }
+  const p = plan.profile;
+  const goalLabels = {perder_grasa:'Perder grasa',ganar_musculo:'Ganar músculo',tonificar:'Tonificar',ecuestre:'Rendimiento ecuestre',flexibilidad:'Flexibilidad'};
+  const eqLabels = {none:'Sin equipamiento',basic:'Equipamiento básico',full:'Gimnasio completo'};
+
+  let html = `<div class="card mb16">
+    <div class="flex justify-between items-center mb12">
+      <div class="card-title" style="margin:0">💎 Tu Plan Personal</div>
+      <button class="btn btn-secondary btn-sm" onclick="gymQStep=1;updateGymQUI();openModal('modal-gym-q')">Actualizar</button>
+    </div>
+    <div class="grid3" style="margin-bottom:12px">
+      <div class="stat"><div class="stat-icon">⚖️</div><div class="stat-val">${p.weight}kg</div><div class="stat-lbl">Peso</div></div>
+      <div class="stat"><div class="stat-icon">📏</div><div class="stat-val">${p.height}cm</div><div class="stat-lbl">Altura</div></div>
+      <div class="stat"><div class="stat-icon">🔢</div><div class="stat-val">${p.bmi}</div><div class="stat-lbl">IMC</div></div>
+    </div>
+    <div class="flex gap8" style="flex-wrap:wrap">
+      <span class="tag tag-brown">${goalLabels[p.goal]||p.goal}</span>
+      <span class="tag tag-blue">${eqLabels[p.equipment]||p.equipment}</span>
+      <span class="tag tag-green">${p.days} días/semana</span>
+      <span class="tag tag-gold">${p.duration} min/sesión</span>
+    </div>
+    ${plan.emphasis?`<div class="text-sm" style="margin-top:12px;padding:10px;background:#FFF5EE;border-radius:8px;color:var(--primary)">💡 ${plan.emphasis}</div>`:''}
+  </div>`;
+
+  html += plan.days.map((d,i)=>{
+    if(d.type==='rest') return `<div class="plan-day"><div class="plan-day-header"><div><div class="plan-day-title">${d.day}</div><div class="plan-day-sub">🧘 Descanso — movilidad suave</div></div></div></div>`;
+    return `<div class="plan-day">
+      <div class="plan-day-header" onclick="togglePlanDay('pd${i}')">
+        <div><div class="plan-day-title">${d.day} — ${d.focus}</div><div class="plan-day-sub">${d.main.length} ejercicios · ${d.main[0]?.sets||3} series</div></div>
+        <span>▾</span>
+      </div>
+      <div class="plan-day-body" id="pd${i}">
+        <div class="plan-section-title">🔥 Calentamiento (5-8 min)</div>
+        ${d.warmup.map(e=>`<div class="plan-ex"><div class="plan-ex-icon">▸</div><div class="plan-ex-name">${e}</div></div>`).join('')}
+        <div class="plan-section-title">💪 Bloque principal</div>
+        ${d.main.map(e=>`<div class="plan-ex"><div class="plan-ex-icon">🏋️</div><div class="plan-ex-name">${e.name}</div><div class="plan-ex-detail">${e.sets}×${e.reps} · desc ${e.rest}</div></div>`).join('')}
+        ${d.cardio?.length?`<div class="plan-section-title">🏃 Cardio</div>${d.cardio.map(e=>`<div class="plan-ex"><div class="plan-ex-icon">⚡</div><div class="plan-ex-name">${e}</div></div>`).join('')}`:''}
+        <div class="plan-section-title">🧘 Vuelta a la calma</div>
+        ${d.cooldown.map(e=>`<div class="plan-ex"><div class="plan-ex-icon">🌿</div><div class="plan-ex-name">${e}</div></div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = html;
+}
+
+function togglePlanDay(id){ const el=document.getElementById(id); if(el) el.classList.toggle('open'); }
+
+// ─── EQUESTRIAN PLAN ──────────────────────────────────────────────────────────
+let eqQStep = 1;
+const EQ_Q_TOTAL = 2;
+
+function eqQNav(dir){
+  if(dir===1 && eqQStep===EQ_Q_TOTAL){ buildEqPlan(); return; }
+  eqQStep = Math.max(1, Math.min(EQ_Q_TOTAL, eqQStep+dir));
+  document.getElementById('eq-q-1').classList.toggle('active', eqQStep===1);
+  document.getElementById('eq-q-2').classList.toggle('active', eqQStep===2);
+  document.getElementById('eq-q-back').style.display = eqQStep>1?'':'none';
+  document.getElementById('eq-q-next').textContent = eqQStep===EQ_Q_TOTAL?'Generar plan ⭐':'Siguiente →';
+  const dots = document.getElementById('eq-q-progress');
+  dots.innerHTML = Array.from({length:EQ_Q_TOTAL},(_,i)=>`<div class="q-dot ${i<eqQStep?'done':''}"></div>`).join('');
+}
+
+const EQ_EXERCISES = {
+  principiante:{
+    tierra:['Trabajo en mano al paso','Longitud en paso (10 min)','Flexibilidad de cuello en mano','Acostumbramiento a objetos nuevos','Trabajo de voz: para y camina'],
+    montado:['Paso con riendas largas y suaves','Transición paso → halt','Trote en diagonal (posting)','Círculo 20m en paso','Ejercicios sin estribos al paso','Cambios de dirección en paso'],
+    tierra_extra:['Cepillado y limpieza antes y después','Observación del lenguaje corporal']
+  },
+  iniciado:{
+    tierra:['Longitud en trote (10-15 min)','Trabajo de voz en galope','Laterales en mano básicos','Flexión de remos'],
+    montado:['Trote sentado 5 min','Transiciones paso-trote','Galope de trabajo (2 minutos)','Círculo 15m en trote','Serpentinas simples en trote','Cambios de rein al trote'],
+    tierra_extra:['Cavalettis en mano','Trabajo sobre terreno variado']
+  },
+  intermedio:{
+    tierra:['Longitud con cavalettis','Trabajo de collection en mano','Shoulder-in en mano','Laterales: rein-back en mano'],
+    montado:['Transiciones dentro del trote (extensión/recolección)','Travers básico','Shoulder-in al trote','Half-pass al trote','Counter-canter corto','Leg-yield en diagonal','Caballos elevados en espirales'],
+    tierra_extra:['Trabajo de in-hand collection','Gymnastic jumping (si es salto)']
+  },
+  avanzado:{
+    tierra:['Piaffe en mano (preparación)','Passage en mano','Pirouette preparación en mano','Half-pass en mano'],
+    montado:['Flying changes simples','Half-pass al galope','Trabajo de collection avanzado','Pirouette al galope (introducción)','Tempi changes 4 tiempos','Piaffe montado (preparación)'],
+    tierra_extra:['Refinamiento de movimientos de competencia']
+  },
+  competicion:{
+    tierra:['Trabajo de in-hand según prueba','Refinamiento de collection'],
+    montado:['Ensayo de prueba completa','Trabajo de los movimientos difíciles','Transiciones perfectas','Presentación y entrada','Trabajo de pieza a pieza'],
+    tierra_extra:['Análisis de video','Trabajo mental: visualización']
+  }
+};
+
+const DISC_NOTES = {
+  doma:'Priorizar collection, impulsión y rectitud. Cada ejercicio preparar para el siguiente nivel.',
+  salto:'Incluir trabajo de poles en tierra, gymnastic lines y progressión de alturas.',
+  completo:'Alternar días de doma, campo y salto. Mantener condición física del caballo.',
+  endurance:'Enfocarse en ritmo, distancia y recuperación. Trabajo cardiovascular progresivo.',
+  western:'Énfasis en collection, paradas y trabajo lateral específico del western.',
+  recreativo:'Priorizar conexión, confianza y disfrute. Sin presión de competencia.'
+};
+
+function buildEqPlan(){
+  const rider = {
+    level: document.getElementById('eq-level').value,
+    discipline: document.getElementById('eq-discipline').value,
+    age: document.getElementById('eq-rider-age').value,
+    fitness: document.getElementById('eq-rider-fitness').value,
+    goal: document.getElementById('eq-goal').value,
+  };
+  const horse = {
+    level: document.getElementById('eq-horse-level').value,
+    age: document.getElementById('eq-horse-age').value,
+    fitness: document.getElementById('eq-horse-fitness').value,
+    days: parseInt(document.getElementById('eq-days').value),
+    limits: document.getElementById('eq-horse-limits').value.trim(),
+  };
+  S.set('eq_plan', generateEqPlan(rider, horse));
+  closeModal('modal-eq-q');
+  eqQStep=1; eqQNav(0);
+  renderEquestrianPlan();
+}
+
+function generateEqPlan(rider, horse){
+  const lvl = rider.level;
+  const exs = EQ_EXERCISES[lvl] || EQ_EXERCISES['iniciado'];
+  const days = horse.days;
+  const DAY_NAMES = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+  const discNote = DISC_NOTES[rider.discipline]||'';
+
+  // Effective level: cap by horse level
+  const horseLvlMap = {verde:0,basico:1,intermedio:2,avanzado:3};
+  const riderLvlMap = {principiante:0,iniciado:1,intermedio:2,avanzado:3,competicion:4};
+  const effectiveLevel = Math.min(horseLvlMap[horse.level]||0, riderLvlMap[lvl]||0);
+  const effectiveLvlName = ['principiante','iniciado','intermedio','avanzado'][effectiveLevel];
+  const effExs = EQ_EXERCISES[effectiveLvlName] || exs;
+
+  // Duration based on fitness and level
+  const duration = horse.fitness==='baja'?30:horse.fitness==='media'?45:60;
+
+  const workDays = [];
+  const patterns = {
+    3:['tierra_montado','descanso','montado_trabajo','descanso','tierra_montado','descanso','descanso'],
+    4:['tierra_montado','montado_trabajo','descanso','tierra_montado','montado_trabajo','descanso','descanso'],
+    5:['tierra_montado','montado_trabajo','descanso','tierra_montado','montado_trabajo','paseo','descanso'],
+    6:['tierra_montado','montado_trabajo','tierra_extra','montado_trabajo','tierra_montado','paseo','descanso'],
+  };
+  const pattern = patterns[days]||patterns[4];
+
+  return {
+    rider, horse, discNote, created: today(),
+    warning: horse.level==='verde'&&riderLvlMap[lvl]>1?'⚠️ Tu caballo está en un nivel inicial. El plan fue adaptado a su nivel para cuidar su bienestar.':'',
+    days: DAY_NAMES.map((name,i)=>{
+      const type = pattern[i];
+      if(type==='descanso') return {day:name, type:'rest'};
+      if(type==='paseo') return {day:name, type:'paseo', duration:40, exercises:['Paseo relajado en campo o pista','Riendas largas, ritmo libre','Trabajo de confianza y descompresión']};
+      const tierra = pick(effExs.tierra||[], 3);
+      const montado = pick(effExs.montado||[], type==='montado_trabajo'?5:3);
+      const extra = type==='tierra_extra' ? (effExs.tierra_extra||[]) : [];
+      return {day:name, type, duration, tierra, montado, extra};
+    })
+  };
+}
+
+function renderEquestrianPlan(){
+  const el = document.getElementById('eq-plan-content');
+  if(!el) return;
+  if(!isPremium()){
+    el.innerHTML=`<div class="premium-lock">
+      <div class="premium-icon">⭐</div>
+      <div class="premium-title">Plan Ecuestre Personalizado</div>
+      <div class="premium-desc">Plan semanal de entrenamiento adaptado a tu nivel como jinete y al nivel de tu caballo. Ejercicios de tierra, montado y acondicionamiento, todo pensado para avanzar juntos.</div>
+      <div class="premium-price">$4.99 USD</div>
+      <div class="premium-period">pago único · incluye también el plan de gym</div>
+      <button class="btn btn-primary" onclick="openModal('modal-premium')">🔑 Tengo un código</button>
+    </div>`;
+    return;
+  }
+  const plan = S.get('eq_plan', null);
+  if(!plan){
+    el.innerHTML=`<div class="card" style="text-align:center;padding:32px">
+      <div style="font-size:40px;margin-bottom:12px">🐴</div>
+      <div style="font-size:16px;font-weight:600;margin-bottom:8px">Creá tu plan ecuestre único</div>
+      <div class="text-sm text-muted mb16">Cuestionario rápido sobre vos y tu caballo</div>
+      <button class="btn btn-primary" onclick="eqQStep=1;eqQNav(0);openModal('modal-eq-q')">Empezar</button>
+    </div>`;
+    return;
+  }
+
+  const levelLabels={principiante:'Principiante',iniciado:'Iniciado',intermedio:'Intermedio',avanzado:'Avanzado',competicion:'Competición'};
+  const discLabels={doma:'Doma clásica',salto:'Salto',completo:'Concurso completo',endurance:'Endurance',western:'Western',recreativo:'Recreativo'};
+  const horseLvlLabels={verde:'Verde',basico:'Básico',intermedio:'Intermedio',avanzado:'Avanzado'};
+
+  let html=`<div class="card mb16">
+    <div class="flex justify-between items-center mb12">
+      <div class="card-title" style="margin:0">⭐ Tu Plan Ecuestre</div>
+      <button class="btn btn-secondary btn-sm" onclick="eqQStep=1;eqQNav(0);openModal('modal-eq-q')">Actualizar</button>
+    </div>
+    <div class="flex gap8 mb12" style="flex-wrap:wrap">
+      <span class="tag tag-brown">Jinete: ${levelLabels[plan.rider.level]||plan.rider.level}</span>
+      <span class="tag tag-blue">${discLabels[plan.rider.discipline]||plan.rider.discipline}</span>
+      <span class="tag tag-green">Caballo: ${horseLvlLabels[plan.horse.level]||plan.horse.level}</span>
+      <span class="tag tag-gold">${plan.horse.days} días/semana</span>
+    </div>
+    ${plan.warning?`<div style="padding:10px;background:#FDF3D0;border-radius:8px;font-size:13px;margin-bottom:10px">${plan.warning}</div>`:''}
+    ${plan.discNote?`<div style="padding:10px;background:#F0F5FF;border-radius:8px;font-size:13px;color:var(--blue)">📌 ${plan.discNote}</div>`:''}
+  </div>`;
+
+  html += plan.days.map((d,i)=>{
+    if(d.type==='rest') return `<div class="plan-day"><div class="plan-day-header"><div><div class="plan-day-title">${d.day}</div><div class="plan-day-sub">🌿 Descanso — potrero libre</div></div></div></div>`;
+    if(d.type==='paseo') return `<div class="plan-day">
+      <div class="plan-day-header" onclick="togglePlanDay('eqpd${i}')">
+        <div><div class="plan-day-title">${d.day} — Paseo / Recuperación</div><div class="plan-day-sub">🌾 ${d.duration} min · baja intensidad</div></div><span>▾</span>
+      </div>
+      <div class="plan-day-body" id="eqpd${i}">
+        ${d.exercises.map(e=>`<div class="plan-ex"><div class="plan-ex-icon">🌿</div><div class="plan-ex-name">${e}</div></div>`).join('')}
+      </div></div>`;
+
+    const hasTierra = d.tierra?.length>0;
+    const hasMontado = d.montado?.length>0;
+    const sub = [hasTierra?'tierra':'',hasMontado?'montado':''].filter(Boolean).join(' + ');
+    return `<div class="plan-day">
+      <div class="plan-day-header" onclick="togglePlanDay('eqpd${i}')">
+        <div><div class="plan-day-title">${d.day}</div><div class="plan-day-sub">🐴 ${sub} · ${d.duration} min</div></div><span>▾</span>
+      </div>
+      <div class="plan-day-body" id="eqpd${i}">
+        ${hasTierra?`<div class="plan-section-title">🦮 Trabajo de tierra / mano</div>${d.tierra.map(e=>`<div class="plan-ex"><div class="plan-ex-icon">🟤</div><div class="plan-ex-name">${e}</div></div>`).join('')}`:''}
+        ${hasMontado?`<div class="plan-section-title">🏇 Trabajo montado</div>${d.montado.map(e=>`<div class="plan-ex"><div class="plan-ex-icon">⭐</div><div class="plan-ex-name">${e}</div></div>`).join('')}`:''}
+        ${d.extra?.length?`<div class="plan-section-title">➕ Trabajo extra</div>${d.extra.map(e=>`<div class="plan-ex"><div class="plan-ex-icon">📌</div><div class="plan-ex-name">${e}</div></div>`).join('')}`:''}
+        <div class="plan-rest">💡 Terminar siempre con unos minutos de paso largo para enfriar</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = html;
+}
+
+function renderAll(){
+  renderHorseProfile();
+  renderTasks();
+  renderTraining();
+  renderHealth();
+  renderCalendar();
+  renderGym();
+  renderGymPersonal();
+  renderEquestrianPlan();
+  renderDiet();
+  renderMotivacion();
+  renderInicio();
+}
+
+// Pre-fill calendar date default
+const _calModal = document.getElementById('modal-cal-event');
+if(_calModal){ const ci=document.getElementById('cal-date'); if(ci) ci.value=today(); }
+
+// ─── INIT ──────────────────────────────────────────────────────────────────────
+// Setear modo default del botón
+document.getElementById('auth-submit-btn').dataset.mode='login';
+
+// Si ya hay sesión activa, mostrar app directo
+const _session = currentUser();
+if(_session){
+  showApp(_session);
+} // si no, el login screen ya está visible por defecto
+</script>
+</body>
+</html>
